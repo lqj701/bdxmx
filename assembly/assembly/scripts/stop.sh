@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT_PATH=`pwd`
-PROJECT_NAME=callcenter
+PROJECT_NAME=miniprogram
 
 PID=`ps -ef | grep $PROJECT_PATH/$PROJECT_NAME | grep -v "grep" | awk '{print $2}'`
 
