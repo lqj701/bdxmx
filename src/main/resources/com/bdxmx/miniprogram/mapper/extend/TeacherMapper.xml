@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bdxmx.miniprogram.mapper.TeacherMapper">
+    <select id="findTeacherByAccessToken" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM teachers t
+        JOIN pc_api_keys pak
+        ON t.id = pak.user_id
+        WHERE pak.access_token = #{userToken}
+    </select>
+
+</mapper>

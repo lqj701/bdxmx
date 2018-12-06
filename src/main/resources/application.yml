@@ -1,0 +1,56 @@
+server:
+    port: 7001
+    context-path: /
+    tomcat:
+        max-threads: 800
+        max-connections: 5000
+        uri-encoding: UTF-8
+        accesslog:
+            enabled: true
+            basedir: /data/log/bdxmx.miniprogram.com
+
+logging:
+    classpath: logback.xml
+
+scheduler:
+    allowedTaskExecute: true
+
+spring:
+    application:
+        name: bdxmx-miniprogram
+    http:
+        encoding.charset: UTF-8
+    datasource:
+        name: bdxmx
+        url: jdbc:mysql://localhost:3306/bdxmx_miniprogram?characterEncoding=utf8&autoReconnect=true
+        username: root
+        password: root
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        connectionInitSqls: set names utf8mb4
+        filters: stat
+        maxActive: 100
+        initialSize: 2
+        maxWait: 60000
+        minIdle: 8
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 120000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 100
+        incrementUrl: jdbc:mysql://rdscbq34656z0ix59br0.mysql.rds.aliyuncs.com:3306/crm_test?characterEncoding=utf8&autoReconnect=true
+        incrementUsername: uc_read
+        incrementPassword: "@wikZ4EuIJmY2y7l"
+    redis:
+        database: 1
+        host: localhost
+        port: 6379
+        password:
+        pool:
+            max-active: 8
+            max-idle: 8
+            max-wait: -1
+            min-idle: 0

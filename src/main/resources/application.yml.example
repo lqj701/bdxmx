@@ -1,0 +1,75 @@
+server:
+    port: 7000
+    context-path: /
+    tomcat:
+        max-threads: 800
+        uri-encoding: UTF-8
+
+logging:
+    classpath: logback.xml
+
+spring:
+    application:
+        name: user-center
+    http:
+        encoding.charset: UTF-8
+    datasource:
+        name: ik-user-center
+        url: jdbc:mysql://rm-m5ef10gzq1n5e7b9a.mysql.rds.aliyuncs.com:3306/user_center_test?characterEncoding=utf8&autoReconnect=true
+        username: user_center_dev
+        password: pHB+!*Uv9Rl9
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        filters: stat
+        maxActive: 100
+        initialSize: 5
+        maxWait: 60000
+        minIdle: 8
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 120000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 100
+        incrementUrl: jdbc:mysql://rm-m5ef10gzq1n5e7b9abo.mysql.rds.aliyuncs.com:3306/crm_dev?characterEncoding=utf8&autoReconnect=true
+        incrementUsername: uc_read
+        incrementPassword: "@wikZ4EuIJmY2y7l"
+
+    redis:
+        database: 10
+        host: localhost
+        port: 6379
+        password:
+        pool:
+            max-active: 8
+            max-idle: 8
+            max-wait: -1
+            min-idle: 0
+
+rabbitmq:
+    config:
+        host: rabbitmq-dev-web.ikcrm.com
+        port: 5672
+        username: uc_dev
+        password: ade0ed885a56
+        virtual-host: user_center
+
+token:
+    credence_timeout: 10
+    credence_time_unit: MINUTES
+    user_token_timeout: 240
+    user_token_time_unit: HOURS
+
+uc:
+  host: http://localhost:7000/
+  access_token: a28bebd2822dd1c63893e4b58f82f0dd6da977
+  password: d97d15547bd7
+
+bms:
+  host: http://dev.bms.ikcrm.com
+  api: /api/user_center/clients
+  token: aa290f759312d091aa1f6f6edbfb8cbf8b3ee618
+  source: user_center
+  ServerToken: 87631d91814b4886816387bb55a0f777
