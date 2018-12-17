@@ -43,5 +43,5 @@
     </root>
 
     <logger name="org.springframework.web" level="INFO"/>
-    <logger name="com.bdxmx.miniprogram.mapper" level="DEBUG"/>
+    <logger name="com.ik.miniprogram.mapper" level="DEBUG"/>
 </configuration>

@@ -7,7 +7,7 @@ server:
         uri-encoding: UTF-8
         accesslog:
             enabled: true
-            basedir: /data/log/bdxmx.miniprogram.com
+            basedir: /data/log/ik.miniprogram.com
 
 logging:
     classpath: logback.xml
@@ -17,11 +17,11 @@ scheduler:
 
 spring:
     application:
-        name: bdxmx-miniprogram
+        name: ik-miniprogram
     http:
         encoding.charset: UTF-8
     datasource:
-        name: bdxmx
+        name: ik
         url: jdbc:mysql://localhost:3306/bdxmx_miniprogram?characterEncoding=utf8&autoReconnect=true
         username: root
         password: root
@@ -41,9 +41,6 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 100
-        incrementUrl: jdbc:mysql://rdscbq34656z0ix59br0.mysql.rds.aliyuncs.com:3306/crm_test?characterEncoding=utf8&autoReconnect=true
-        incrementUsername: uc_read
-        incrementPassword: "@wikZ4EuIJmY2y7l"
     redis:
         database: 1
         host: localhost

@@ -5,8 +5,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.bdxmx.miniprogram.BdxmxMiniProgramApplication;
 import com.ik.crm.commons.util.BCryptUtil;
+import com.ik.service.miniprogram.BdxmxMiniProgramApplication;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BdxmxMiniProgramApplication.class)

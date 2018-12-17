@@ -24,7 +24,7 @@
     <dependencySets>
         <dependencySet>
             <includes>
-                <include>com.bdxmx.miniprogram</include>
+                <include>com.ik.miniprogram</include>
             </includes>
             <outputDirectory>/</outputDirectory>
         </dependencySet>
