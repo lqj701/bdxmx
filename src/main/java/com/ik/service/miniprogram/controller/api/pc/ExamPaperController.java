@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ik.crm.commons.dto.ResultResponse;
+import com.ik.service.miniprogram.annotation.IgnoreUserToken;
 import com.ik.service.miniprogram.constants.CourseEnum;
 import com.ik.service.miniprogram.constants.ErrorCode;
 import com.ik.service.miniprogram.model.ExamPaper;
@@ -23,6 +24,7 @@ import com.ik.service.miniprogram.model.Teacher;
 import com.ik.service.miniprogram.service.ExamPaperService;
 import com.ik.service.miniprogram.service.QuestionService;
 
+@IgnoreUserToken
 @RestController
 @RequestMapping(value = "/api/paper", produces = "application/json;utf-8")
 public class ExamPaperController extends AbstractUserController {
@@ -48,13 +50,13 @@ public class ExamPaperController extends AbstractUserController {
         String name = params.getString("name");
         List<Integer> questionIds = params.getJSONArray("questionIds").toJavaList(Integer.class);
         Integer totalScore = params.getInteger("totalScore");
-        Teacher teacher = getUser(request);
+//        Teacher teacher = getUser(request);
 
         if (null == paperType || null == name || null == questionIds || null == totalScore) {
             return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
         }
 
-        examPaperService.saveExamPaper(CourseEnum.getCourseEnum(paperType).getCode(), name, teacher.getId(),
+        examPaperService.saveExamPaper(CourseEnum.getCourseEnum(paperType).getCode(), name, 1,
                 questionIds.toString(), totalScore);
 
         return ResultResponse.success();

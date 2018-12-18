@@ -9,7 +9,7 @@
         <id column="ep_id" property="id" jdbcType="INTEGER" />
         <result column="ep_paper_type" property="paperType" jdbcType="INTEGER" />
         <result column="ep_name" property="name" jdbcType="VARCHAR" />
-        <result column="ep_total scores" property="totalScores" jdbcType="INTEGER" />
+        <result column="ep_total_scores" property="totalScores" jdbcType="INTEGER" />
         <result column="ep_set_person" property="setPerson" jdbcType="VARCHAR" />
         <result column="ep_question_ids" property="questionIds" jdbcType="VARCHAR" />
         <result column="ep_created_at" property="createdAt" jdbcType="TIMESTAMP" />
@@ -17,7 +17,7 @@
     </resultMap>
     
     <sql id="Base_Column_List" >
-        ep.id as ep_id, ep.paper_type as ep_paper_type, ep.name as ep_name, ep."total scores" as "ep_total scores", 
+        ep.id as ep_id, ep.paper_type as ep_paper_type, ep.name as ep_name, ep.total_scores as ep_total_scores, 
         ep.set_person as ep_set_person, ep.question_ids as ep_question_ids, ep.created_at as ep_created_at, 
         ep.updated_at as ep_updated_at
     </sql>
@@ -35,7 +35,7 @@
     </delete>
     
     <insert id="insert" parameterType="com.ik.service.miniprogram.model.ExamPaper" useGeneratedKeys="true" keyProperty="id" >
-        insert into exam_papers (paper_type, name, "total scores", 
+        insert into exam_papers (paper_type, name, total_scores, 
           set_person, question_ids, created_at, 
           updated_at)
         values (#{paperType,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{totalScores,jdbcType=INTEGER}, 
@@ -53,7 +53,7 @@
                 name,
             </if>
             <if test="totalScores != null" >
-                "total scores",
+                total_scores,
             </if>
             <if test="setPerson != null" >
                 set_person,
@@ -103,7 +103,7 @@
                 name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="totalScores != null" >
-                "total scores" = #{totalScores,jdbcType=INTEGER},
+                total_scores = #{totalScores,jdbcType=INTEGER},
             </if>
             <if test="setPerson != null" >
                 set_person = #{setPerson,jdbcType=VARCHAR},
@@ -125,7 +125,7 @@
         update exam_papers
         set paper_type = #{paperType,jdbcType=INTEGER},
           name = #{name,jdbcType=VARCHAR},
-          "total scores" = #{totalScores,jdbcType=INTEGER},
+          total_scores = #{totalScores,jdbcType=INTEGER},
           set_person = #{setPerson,jdbcType=VARCHAR},
           question_ids = #{questionIds,jdbcType=VARCHAR},
           created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -146,7 +146,7 @@
                     and ep.name = #{model.name}
                 </if>
                 <if test="model.totalScores != null" >
-                    and ep.total scores = #{model.totalScores}
+                    and ep.total_scores = #{model.totalScores}
                 </if>
                 <if test="model.setPerson != null" >
                     and ep.set_person = #{model.setPerson}
@@ -205,7 +205,7 @@
     
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" >
         insert into exam_papers (
-            paper_type, name, total scores, 
+            paper_type, name, total_scores, 
             set_person, question_ids, created_at, 
             updated_at
         ) values

@@ -26,7 +26,7 @@ public class ExamPaper extends BaseModel<Integer> implements Serializable {
 
     /**
      * 总分
-     * total scores
+     * total_scores
      */
     private Integer totalScores;
 
@@ -94,7 +94,7 @@ public class ExamPaper extends BaseModel<Integer> implements Serializable {
 
     /**
      * 总分
-     * total scores
+     * total_scores
      */
     public Integer getTotalScores() {
         return totalScores;
@@ -102,7 +102,7 @@ public class ExamPaper extends BaseModel<Integer> implements Serializable {
 
     /**
      * 总分
-     * total scores
+     * total_scores
      *
      * @param totalScores 总分
      */

@@ -78,10 +78,10 @@ public class ExamPaperServiceImpl extends GenericServiceImpl<ExamPaper, Integer,
         }
         JSONObject data = new JSONObject();
         String questionIds = examPaper.getQuestionIds();
-        String[] temp = questionIds.substring(0, questionIds.length() - 1).split(",");
+        String[] temp = questionIds.substring(1, questionIds.length() - 1).split(",");
         List<Question> questionList = Lists.newArrayList();
         for (int i = 0; i < temp.length; i++) {
-            questionList.add(questionService.selectByPrimaryKey(Integer.parseInt(temp[i])));
+            questionList.add(questionService.selectByPrimaryKey(Integer.parseInt(temp[i].replaceAll(" ",""))));
         }
         data.put("examPaper", examPaper);
         data.put("questionIdList", questionList);
