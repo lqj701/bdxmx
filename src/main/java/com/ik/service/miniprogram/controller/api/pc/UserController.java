@@ -46,8 +46,7 @@ public class UserController extends AbstractUserController {
         Integer type = params.getInteger("type");
         Boolean gendar = params.getBoolean("gendar");
 
-        if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(name)
-                || StringUtils.isEmpty(email) || null == type) {
+        if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(name) || null == type) {
             return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
         }
 

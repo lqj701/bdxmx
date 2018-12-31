@@ -21,13 +21,10 @@ public class CorsConfig extends WebMvcConfigurerAdapter {
 
      @Override
      public void addCorsMappings(CorsRegistry registry) {
-     List<String> corsList = crosProperty.getOrigins();
-     if (!CollectionUtils.isEmpty(corsList)) {
-     String[] array = (String[]) corsList.toArray(new String[corsList.size()]);
-     registry.addMapping("/**").allowedOrigins(array);
-     } else {
-     registry.addMapping("/**").allowedOrigins("*");
-     }
-     log.info("cors host = {}", corsList);
+          registry.addMapping("/**")
+                  .allowedOrigins("*")
+                  .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+                  .maxAge(3600)
+                  .allowCredentials(true);
      }
 }
