@@ -55,6 +55,7 @@ public class UserTokenInterceptor extends HandlerInterceptorAdapter {
         redisTemplate.expire(userToken, 2, TimeUnit.DAYS);
 
         request.setAttribute("userToken", uid);
+        UserTokenInterceptor.log.info("set attribute uid = {}",uid);
         return super.preHandle(request, response, handler);
     }
 }

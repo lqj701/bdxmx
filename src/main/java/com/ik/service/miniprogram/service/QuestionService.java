@@ -3,6 +3,7 @@ package com.ik.service.miniprogram.service;
 import java.util.List;
 
 import org.mybatis.extend.generic.service.GenericService;
+import org.mybatis.extend.page.param.Page;
 
 import com.ik.service.miniprogram.model.Question;
 
@@ -15,11 +16,11 @@ import com.ik.service.miniprogram.model.Question;
  */
 public interface QuestionService extends GenericService<Question, Integer> {
 
-    Question save(Integer courseType, Integer questionType, String stem, String questionChoice,String answer, Integer accountId, Float point);
+    Question save(Integer courseType, Integer questionType, String stem, String questionChoice,String answer, Integer teacherId, Float point);
 
-    Question update(Integer questionId, String stem, String questionChoice, String answer, Float point);
+    Question update(Question question, String stem, String questionChoice, String answer, Float point);
 
     List<Question> getByIds(List<Integer> questionIds);
 
-    List<Question> getByTeacherId(Integer teacherId);
+    List<Question> getByTeacherId(Integer teacherId,Page page);
 }

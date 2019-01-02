@@ -3,13 +3,13 @@ package com.ik.service.miniprogram.service.impl;
 import java.util.List;
 
 import org.mybatis.extend.generic.service.impl.GenericServiceImpl;
+import org.mybatis.extend.page.param.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ik.service.miniprogram.mapper.QuestionMapper;
 import com.ik.service.miniprogram.model.Question;
-import com.ik.service.miniprogram.model.Teacher;
 import com.ik.service.miniprogram.service.QuestionService;
 import com.ik.service.miniprogram.service.TeacherService;
 
@@ -35,7 +35,7 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, Integer, Q
     }
 
     @Override
-    public Question save(Integer courseType, Integer questionType, String stem,String questionChoice, String answer, Integer accountId,
+    public Question save(Integer courseType, Integer questionType, String stem,String questionChoice, String answer, Integer teacherId,
             Float point) {
         Question question = new Question();
         question.setCourseType(courseType);
@@ -43,11 +43,7 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, Integer, Q
         question.setQuestionStem(stem);
         question.setQuestionChoice(questionChoice);
         question.setQuestionAnswer(answer);
-
-        Teacher teacher = new Teacher();
-        teacher.setAccountId(accountId);
-        teacher = teacherService.selectOne(teacher);
-        question.setTeacherId(teacher.getId());
+        question.setTeacherId(teacherId);
         question.setPoint(point);
         questionMapper.insertSelective(question);
         return question;
@@ -55,10 +51,7 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, Integer, Q
 
 
     @Override
-    public Question update(Integer questionId, String stem,String questionChoice, String answer, Float point) {
-        Question question = new Question();
-        question.setId(questionId);
-        question = questionMapper.selectOne(question);
+    public Question update(Question question, String stem,String questionChoice, String answer, Float point) {
         question.setQuestionStem(stem);
         question.setQuestionChoice(questionChoice);
         question.setQuestionAnswer(answer);
@@ -75,10 +68,8 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, Integer, Q
     }
 
     @Override
-    public List<Question> getByTeacherId(Integer teacherId) {
-        Question question = new Question();
-        question.setTeacherId(teacherId);
+    public List<Question> getByTeacherId(Integer teacherId, Page page) {
 
-        return questionMapper.select(question);
+        return questionMapper.getByTeacherId(teacherId,page);
     }
 }

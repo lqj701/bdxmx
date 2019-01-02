@@ -55,7 +55,7 @@ public class AccountServiceImpl extends GenericServiceImpl<Account, Integer, Acc
     public Account register(String phone, String password, String name, String email, String avatarUrl,
             Boolean gendar) {
         Account account = new Account();
-        account.setUsable(false);
+        account.setUsable(true);
         account.setPhone(phone);
         account.setName(name);
         account.setEmail(email);
@@ -123,26 +123,26 @@ public class AccountServiceImpl extends GenericServiceImpl<Account, Integer, Acc
         JSONObject data = new JSONObject();
         List<Account> accountList = accountService.getAccount(phone);
         if (CollectionUtils.isEmpty(accountList)) {
-            data.put("code", ErrorCode.ACCOUNT_NOT_EXIST.getCode());
+            data.put("error", ErrorCode.ACCOUNT_NOT_EXIST);
             return data;
         }
         if (accountList.size() > 1) {
-            data.put("code", ErrorCode.ACCOUNT_NOT_ONLY.getCode());
+            data.put("error", ErrorCode.ACCOUNT_NOT_ONLY);
             return data;
         }
         if (!accountList.get(0).getUsable()) {
-            data.put("code", ErrorCode.ACCOUNT_NOT_USABLE.getCode());
+            data.put("error", ErrorCode.ACCOUNT_NOT_USABLE);
             return data;
         }
         List<Teacher> teacherList = teacherService.getTeachersByAccountId(accountList.get(0).getId());
 
         if (teacherList.size() > 1) {
-            data.put("code", ErrorCode.LOGIN_FAILED.getCode());
+            data.put("error", ErrorCode.LOGIN_FAILED);
         }
 
         if (StringUtils.isEmpty(accountList.get(0).getEncryptedPassword())
                 || !BCryptUtil.verifyPassword(accountList.get(0).getEncryptedPassword(), password)) {
-            data.put("code", ErrorCode.PASSWORD_WRONG.getCode());
+            data.put("error", ErrorCode.PASSWORD_WRONG);
             return data;
         }
         data.put("code", 0);

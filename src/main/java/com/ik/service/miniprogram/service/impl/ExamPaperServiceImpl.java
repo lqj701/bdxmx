@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.assertj.core.util.Lists;
 import org.mybatis.extend.generic.service.impl.GenericServiceImpl;
+import org.mybatis.extend.page.param.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ik.service.miniprogram.mapper.ExamPaperMapper;
 import com.ik.service.miniprogram.model.ExamPaper;
 import com.ik.service.miniprogram.model.Question;
+import com.ik.service.miniprogram.model.Teacher;
 import com.ik.service.miniprogram.service.ExamPaperService;
 import com.ik.service.miniprogram.service.QuestionService;
 import com.ik.service.miniprogram.service.TeacherService;
@@ -41,12 +43,13 @@ public class ExamPaperServiceImpl extends GenericServiceImpl<ExamPaper, Integer,
     }
 
     @Override
-    public ExamPaper saveExamPaper(Integer paperType, String name, Integer teacherId, String questionIds,
+    public ExamPaper saveExamPaper(Integer paperType, String name, Teacher teacher, String questionIds,
                                    Integer totalScore) {
         ExamPaper examPaper = new ExamPaper();
         examPaper.setPaperType(paperType);
         examPaper.setName(name);
-        examPaper.setSetPerson(teacherService.selectByPrimaryKey(teacherId).getName());
+        examPaper.setTeacherId(teacher.getId());
+        examPaper.setSetPerson(teacher.getName());
         examPaper.setQuestionIds(questionIds);
         examPaper.setTotalScores(totalScore);
         examPaper.setCreatedAt(new Date());
@@ -87,6 +90,11 @@ public class ExamPaperServiceImpl extends GenericServiceImpl<ExamPaper, Integer,
         data.put("questionIdList", questionList);
 
         return data;
+    }
+
+    @Override
+    public List<ExamPaper> getPaperList(Integer teacherId, Page page) {
+        return examPaperMapper.getPaperList(teacherId,page);
     }
 
 }

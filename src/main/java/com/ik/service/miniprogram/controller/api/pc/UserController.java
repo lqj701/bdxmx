@@ -106,23 +106,15 @@ public class UserController extends AbstractUserController {
         }
 
         JSONObject jsonObject = accountService.loginVerify(phone, password);
-        if (jsonObject.getInteger("code").equals(0)) {
+        ErrorCode errorCode = (ErrorCode) jsonObject.get("error");
+        if (null == errorCode) {
             Teacher teacher = (Teacher) jsonObject.get("teacher");
             String userToken = loginService.getToken(loginService.getCredence(teacher.getId())).get("userToken");
             jsonObject.put("userToken", userToken);
             return ResultResponse.success(jsonObject);
-        } else if (jsonObject.getInteger("code").equals(ErrorCode.ACCOUNT_NOT_EXIST.getCode())) {
-            return ResultResponse.define(ErrorCode.ACCOUNT_NOT_EXIST.getCode(), ErrorCode.ACCOUNT_NOT_EXIST.getMsg());
-        } else if (jsonObject.getInteger("code").equals(ErrorCode.ACCOUNT_NOT_USABLE.getCode())) {
-            return ResultResponse.define(ErrorCode.ACCOUNT_NOT_USABLE.getCode(), ErrorCode.ACCOUNT_NOT_USABLE.getMsg());
-        } else if (jsonObject.getInteger("code").equals(ErrorCode.USER_NOT_EXIST.getCode())) {
-            return ResultResponse.define(ErrorCode.USER_NOT_EXIST.getCode(), ErrorCode.USER_NOT_EXIST.getMsg());
-        } else if (jsonObject.getInteger("code").equals(ErrorCode.LOGIN_FAILED.getCode())) {
-            return ResultResponse.define(ErrorCode.LOGIN_FAILED.getCode(), ErrorCode.LOGIN_FAILED.getMsg());
-        } else if (jsonObject.getInteger("code").equals(ErrorCode.PASSWORD_WRONG.getCode())) {
-            return ResultResponse.define(ErrorCode.PASSWORD_WRONG.getCode(), ErrorCode.PASSWORD_WRONG.getMsg());
+        } else {
+            return ResultResponse.define(errorCode.getCode(),errorCode.getMsg());
         }
-        return ResultResponse.success();
     }
 
 }

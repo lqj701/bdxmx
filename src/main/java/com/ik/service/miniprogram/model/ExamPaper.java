@@ -31,6 +31,12 @@ public class ExamPaper extends BaseModel<Integer> implements Serializable {
     private Integer totalScores;
 
     /**
+     * 
+     * teacher_id
+     */
+    private Integer teacherId;
+
+    /**
      * 出卷人
      * set_person
      */
@@ -108,6 +114,24 @@ public class ExamPaper extends BaseModel<Integer> implements Serializable {
      */
     public void setTotalScores(Integer totalScores) {
         this.totalScores = totalScores;
+    }
+
+    /**
+     * 
+     * teacher_id
+     */
+    public Integer getTeacherId() {
+        return teacherId;
+    }
+
+    /**
+     * 
+     * teacher_id
+     *
+     * @param teacherId 
+     */
+    public void setTeacherId(Integer teacherId) {
+        this.teacherId = teacherId;
     }
 
     /**
@@ -192,6 +216,7 @@ public class ExamPaper extends BaseModel<Integer> implements Serializable {
         sb.append(", paperType=").append(paperType);
         sb.append(", name=").append(name);
         sb.append(", totalScores=").append(totalScores);
+        sb.append(", teacherId=").append(teacherId);
         sb.append(", setPerson=").append(setPerson);
         sb.append(", questionIds=").append(questionIds);
         sb.append(", createdAt=").append(createdAt);

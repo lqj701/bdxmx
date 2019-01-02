@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.mybatis.extend.generic.mapper.GenericMapper;
+import org.mybatis.extend.page.param.Page;
 
 import com.ik.service.miniprogram.model.Question;
 
@@ -16,4 +17,6 @@ import com.ik.service.miniprogram.model.Question;
  */
 public interface QuestionMapper extends GenericMapper<Question, Integer> {
     List<Question> getByIds(@Param("questionIds") List<Integer> questionIds);
+
+    List<Question> getByTeacherId(@Param("teacherId") Integer teacherId,@Param("page") Page page);
 }

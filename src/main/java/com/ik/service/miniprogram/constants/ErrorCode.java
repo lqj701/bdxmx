@@ -33,7 +33,9 @@ public enum ErrorCode {
 
     CREDENCE_ERROR(200013, "credence错误"),
 
-    SYSTEM_ERROR(200014, "系统错误");
+    SYSTEM_ERROR(200014, "系统错误"),
+
+    NOT_AUTH(200015,"没有权限");
 
     private int code;
     private String msg;

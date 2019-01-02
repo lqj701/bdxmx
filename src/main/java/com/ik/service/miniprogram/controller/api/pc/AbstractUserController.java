@@ -21,7 +21,7 @@ public abstract class AbstractUserController {
     private TeacherService teacherService;
 
     protected Teacher getUser(HttpServletRequest request) {
-        Object uidObject = request.getAttribute("uerToken");
+        Object uidObject = request.getAttribute("userToken");
         AbstractUserController.logger.info("uidObject = {}", uidObject);
         Integer uid = Integer.parseInt((String) uidObject);
         Teacher user = teacherService.selectByPrimaryKey(uid);

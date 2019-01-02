@@ -10,6 +10,7 @@
         <result column="ep_paper_type" property="paperType" jdbcType="INTEGER" />
         <result column="ep_name" property="name" jdbcType="VARCHAR" />
         <result column="ep_total_scores" property="totalScores" jdbcType="INTEGER" />
+        <result column="ep_teacher_id" property="teacherId" jdbcType="INTEGER" />
         <result column="ep_set_person" property="setPerson" jdbcType="VARCHAR" />
         <result column="ep_question_ids" property="questionIds" jdbcType="VARCHAR" />
         <result column="ep_created_at" property="createdAt" jdbcType="TIMESTAMP" />
@@ -18,8 +19,8 @@
     
     <sql id="Base_Column_List" >
         ep.id as ep_id, ep.paper_type as ep_paper_type, ep.name as ep_name, ep.total_scores as ep_total_scores, 
-        ep.set_person as ep_set_person, ep.question_ids as ep_question_ids, ep.created_at as ep_created_at, 
-        ep.updated_at as ep_updated_at
+        ep.teacher_id as ep_teacher_id, ep.set_person as ep_set_person, ep.question_ids as ep_question_ids, 
+        ep.created_at as ep_created_at, ep.updated_at as ep_updated_at
     </sql>
     
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -36,11 +37,11 @@
     
     <insert id="insert" parameterType="com.ik.service.miniprogram.model.ExamPaper" useGeneratedKeys="true" keyProperty="id" >
         insert into exam_papers (paper_type, name, total_scores, 
-          set_person, question_ids, created_at, 
-          updated_at)
+          teacher_id, set_person, question_ids, 
+          created_at, updated_at)
         values (#{paperType,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{totalScores,jdbcType=INTEGER}, 
-          #{setPerson,jdbcType=VARCHAR}, #{questionIds,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
-          #{updatedAt,jdbcType=TIMESTAMP})
+          #{teacherId,jdbcType=INTEGER}, #{setPerson,jdbcType=VARCHAR}, #{questionIds,jdbcType=VARCHAR}, 
+          #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
     </insert>
     
     <insert id="insertSelective" parameterType="com.ik.service.miniprogram.model.ExamPaper" useGeneratedKeys="true" keyProperty="id" >
@@ -54,6 +55,9 @@
             </if>
             <if test="totalScores != null" >
                 total_scores,
+            </if>
+            <if test="teacherId != null" >
+                teacher_id,
             </if>
             <if test="setPerson != null" >
                 set_person,
@@ -77,6 +81,9 @@
             </if>
             <if test="totalScores != null" >
                 #{totalScores,jdbcType=INTEGER},
+            </if>
+            <if test="teacherId != null" >
+                #{teacherId,jdbcType=INTEGER},
             </if>
             <if test="setPerson != null" >
                 #{setPerson,jdbcType=VARCHAR},
@@ -105,6 +112,9 @@
             <if test="totalScores != null" >
                 total_scores = #{totalScores,jdbcType=INTEGER},
             </if>
+            <if test="teacherId != null" >
+                teacher_id = #{teacherId,jdbcType=INTEGER},
+            </if>
             <if test="setPerson != null" >
                 set_person = #{setPerson,jdbcType=VARCHAR},
             </if>
@@ -126,6 +136,7 @@
         set paper_type = #{paperType,jdbcType=INTEGER},
           name = #{name,jdbcType=VARCHAR},
           total_scores = #{totalScores,jdbcType=INTEGER},
+          teacher_id = #{teacherId,jdbcType=INTEGER},
           set_person = #{setPerson,jdbcType=VARCHAR},
           question_ids = #{questionIds,jdbcType=VARCHAR},
           created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -147,6 +158,9 @@
                 </if>
                 <if test="model.totalScores != null" >
                     and ep.total_scores = #{model.totalScores}
+                </if>
+                <if test="model.teacherId != null" >
+                    and ep.teacher_id = #{model.teacherId}
                 </if>
                 <if test="model.setPerson != null" >
                     and ep.set_person = #{model.setPerson}
@@ -206,14 +220,14 @@
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" >
         insert into exam_papers (
             paper_type, name, total_scores, 
-            set_person, question_ids, created_at, 
-            updated_at
+            teacher_id, set_person, question_ids, 
+            created_at, updated_at
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
         (
             #{item.paperType}, #{item.name}, #{item.totalScores}, 
-            #{item.setPerson}, #{item.questionIds}, #{item.createdAt}, 
-            #{item.updatedAt}
+            #{item.teacherId}, #{item.setPerson}, #{item.questionIds}, 
+            #{item.createdAt}, #{item.updatedAt}
         )
         </foreach>
     </insert>

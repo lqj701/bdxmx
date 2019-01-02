@@ -6,14 +6,25 @@
     -->
 
 
-    <select id="getByIds" resultMap="BaseResultMap">
+    <select id="getByIds" resultMap="ResultMapWithBLOBs">
         SELECT
         <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
         FROM questions qu
         WHERE id IN
         <foreach collection="questionIds" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
+    </select>
+
+    <select id="getByTeacherId" resultMap="ResultMapWithBLOBs">
+        SELECT
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        FROM questions qu
+        WHERE teacher_id = #{teacherId}
     </select>
 
 
