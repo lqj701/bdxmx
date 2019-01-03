@@ -37,8 +37,8 @@ public class BootConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        super.addInterceptors(registry);
         registry.addInterceptor(getUserTokenInterceptor()).addPathPatterns("/**");
+        super.addInterceptors(registry);
     }
 
     @Override

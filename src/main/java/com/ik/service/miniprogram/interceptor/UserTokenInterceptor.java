@@ -30,11 +30,8 @@ public class UserTokenInterceptor extends HandlerInterceptorAdapter {
         String userToken = request.getHeader("userToken");
         UserTokenInterceptor.log.info("userToken = {}, , url = {}", userToken, url);
 
-        if (url.endsWith("logout") || url.endsWith("login")) {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-            return super.preHandle(request, response, handler);
-        }
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         // 配置该注解，说明不进行服务拦截
