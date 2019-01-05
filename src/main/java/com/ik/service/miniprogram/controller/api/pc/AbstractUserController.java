@@ -21,9 +21,10 @@ public abstract class AbstractUserController {
     private TeacherService teacherService;
 
     protected Teacher getUser(HttpServletRequest request) {
-        Object uidObject = request.getAttribute("userToken");
-        AbstractUserController.logger.info("uidObject = {}", uidObject);
-        Integer uid = Integer.parseInt((String) uidObject);
+//        Object uidObject = request.getAttribute("userToken");
+//        AbstractUserController.logger.info("uidObject = {}", uidObject);
+//        Integer uid = Integer.parseInt((String) uidObject);
+        Integer uid = Integer.parseInt(request.getHeader("uid"));
         Teacher user = teacherService.selectByPrimaryKey(uid);
         if (user == null) {
             throw new MPException(ErrorCode.USER_NOT_EXIST);

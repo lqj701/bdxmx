@@ -50,7 +50,15 @@ public class UserController extends AbstractUserController {
             return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
         }
 
-        Account account = accountService.register(phone, password, name, email, avatarUrl, gendar);
+        Account query = new Account();
+        query.setPhone(phone);
+        Account account = accountService.selectOne(query);
+        if (null != account) {
+            return ResultResponse.define(ErrorCode.PHONE_ALREADY_REGISTER.getCode(),
+                    ErrorCode.PHONE_ALREADY_REGISTER.getMsg());
+        }
+
+        accountService.register(phone, password, name, email, avatarUrl, gendar);
         teacherService.save(account, CourseEnum.getCourseEnum(type).getCode());
 
         return ResultResponse.success();
@@ -78,7 +86,7 @@ public class UserController extends AbstractUserController {
     public ResultResponse<?> updatePassword(@RequestBody JSONObject params, HttpServletRequest request) {
         Teacher teacher = getUser(request);
 
-        String password = params.getString("password ");
+        String password = params.getString("password");
         String passwordTwo = params.getString("passwordTwo");
         String passwordNew = params.getString("passwordNew");
 
@@ -111,9 +119,10 @@ public class UserController extends AbstractUserController {
             Teacher teacher = (Teacher) jsonObject.get("teacher");
             String userToken = loginService.getToken(loginService.getCredence(teacher.getId())).get("userToken");
             jsonObject.put("userToken", userToken);
+            jsonObject.put("uid", teacher.getId());
             return ResultResponse.success(jsonObject);
         } else {
-            return ResultResponse.define(errorCode.getCode(),errorCode.getMsg());
+            return ResultResponse.define(errorCode.getCode(), errorCode.getMsg());
         }
     }
 

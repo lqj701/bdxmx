@@ -35,7 +35,9 @@ public enum ErrorCode {
 
     SYSTEM_ERROR(200014, "系统错误"),
 
-    NOT_AUTH(200015,"没有权限");
+    NOT_AUTH(200015, "没有权限"),
+
+    PHONE_ALREADY_REGISTER(200016, "手机号已注册");
 
     private int code;
     private String msg;
