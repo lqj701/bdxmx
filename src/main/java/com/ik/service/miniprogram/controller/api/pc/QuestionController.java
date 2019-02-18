@@ -80,6 +80,9 @@ public class QuestionController extends AbstractUserController {
         String questionChoice = params.getString("questionChoice");
         String answer = params.getString("answer");
         Float point = params.getFloat("point");
+        String questionImage = params.getString("questionImage");
+        String questionAudio = params.getString("questionAudio");
+        String questionVideo = params.getString("questionVideo");
 
         if (null == questionId || null == stem || null == answer) {
             return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
@@ -92,7 +95,8 @@ public class QuestionController extends AbstractUserController {
         if (!questionList.contains(questionOld)) {
             return ResultResponse.define(ErrorCode.NOT_AUTH.getCode(), ErrorCode.NOT_AUTH.getMsg());
         }
-        Question questionNew = questionService.update(questionOld, stem, questionChoice, answer, point);
+        Question questionNew = questionService.update(questionOld, stem, questionChoice, answer, point, questionImage,
+                questionAudio, questionVideo);
 
         return ResultResponse.success(questionNew);
     }
