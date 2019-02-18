@@ -66,6 +66,24 @@ public class Question extends BaseModel<Integer> implements Serializable {
      */
     private String questionAnswer;
 
+    /**
+     * 音频--json
+     * question_audio
+     */
+    private String questionAudio;
+
+    /**
+     * 图片--json
+     * question_image
+     */
+    private String questionImage;
+
+    /**
+     * 视频--json
+     * question_video
+     */
+    private String questionVideo;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -230,6 +248,60 @@ public class Question extends BaseModel<Integer> implements Serializable {
         this.questionAnswer = questionAnswer;
     }
 
+    /**
+     * 音频--json
+     * question_audio
+     */
+    public String getQuestionAudio() {
+        return questionAudio;
+    }
+
+    /**
+     * 音频--json
+     * question_audio
+     *
+     * @param questionAudio 音频--json
+     */
+    public void setQuestionAudio(String questionAudio) {
+        this.questionAudio = questionAudio;
+    }
+
+    /**
+     * 图片--json
+     * question_image
+     */
+    public String getQuestionImage() {
+        return questionImage;
+    }
+
+    /**
+     * 图片--json
+     * question_image
+     *
+     * @param questionImage 图片--json
+     */
+    public void setQuestionImage(String questionImage) {
+        this.questionImage = questionImage;
+    }
+
+    /**
+     * 视频--json
+     * question_video
+     */
+    public String getQuestionVideo() {
+        return questionVideo;
+    }
+
+    /**
+     * 视频--json
+     * question_video
+     *
+     * @param questionVideo 视频--json
+     */
+    public void setQuestionVideo(String questionVideo) {
+        this.questionVideo = questionVideo;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -246,6 +318,9 @@ public class Question extends BaseModel<Integer> implements Serializable {
         sb.append(", questionStem=").append(questionStem);
         sb.append(", questionChoice=").append(questionChoice);
         sb.append(", questionAnswer=").append(questionAnswer);
+        sb.append(", questionAudio=").append(questionAudio);
+        sb.append(", questionImage=").append(questionImage);
+        sb.append(", questionVideo=").append(questionVideo);
         sb.append("]");
         return sb.toString();
     }

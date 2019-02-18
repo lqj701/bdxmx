@@ -35,13 +35,16 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, Integer, Q
     }
 
     @Override
-    public Question save(Integer courseType, Integer questionType, String stem,String questionChoice, String answer, Integer teacherId,
-            Float point) {
+    public Question save(Integer courseType, Integer questionType, String stem, String questionChoice, String answer,
+            Integer teacherId, Float point, String questionImage, String questionAudio, String questionVideo) {
         Question question = new Question();
         question.setCourseType(courseType);
         question.setQuestionType(questionType);
         question.setQuestionStem(stem);
         question.setQuestionChoice(questionChoice);
+        question.setQuestionImage(questionImage);
+        question.setQuestionAudio(questionAudio);
+        question.setQuestionVideo(questionVideo);
         question.setQuestionAnswer(answer);
         question.setTeacherId(teacherId);
         question.setPoint(point);
@@ -51,12 +54,16 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, Integer, Q
 
 
     @Override
-    public Question update(Question question, String stem,String questionChoice, String answer, Float point) {
+    public Question update(Question question, String stem, String questionChoice, String answer, Float point,
+            String questionImage, String questionAudio, String questionVideo) {
         question.setQuestionStem(stem);
         question.setQuestionChoice(questionChoice);
         question.setQuestionAnswer(answer);
         question.setPoint(point);
-
+        question.setQuestionChoice(questionChoice);
+        question.setQuestionImage(questionImage);
+        question.setQuestionAudio(questionAudio);
+        question.setQuestionVideo(questionVideo);
         questionMapper.updateByPrimaryKeySelective(question);
         return question;
     }
@@ -70,6 +77,6 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, Integer, Q
     @Override
     public List<Question> getByTeacherId(Integer teacherId, Page page) {
 
-        return questionMapper.getByTeacherId(teacherId,page);
+        return questionMapper.getByTeacherId(teacherId, page);
     }
 }

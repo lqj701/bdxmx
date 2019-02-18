@@ -34,7 +34,7 @@ public class QuestionController extends AbstractUserController {
     private QuestionService questionService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultResponse<?> addQuestion(@RequestBody JSONObject params,HttpServletRequest request) {
+    public ResultResponse<?> addQuestion(@RequestBody JSONObject params, HttpServletRequest request) {
         Teacher teacher = getUser(request);
         Integer courseType = params.getInteger("courseType");
         Integer questionType = params.getInteger("questionType");
@@ -42,13 +42,17 @@ public class QuestionController extends AbstractUserController {
         String questionChoice = params.getString("questionChoice");
         String answer = params.getString("answer");
         Float point = params.getFloat("point");
+        String questionImage = params.getString("questionImage");
+        String questionAudio = params.getString("questionAudio");
+        String questionVideo = params.getString("questionVideo");
 
         if (StringUtils.isEmpty(stem) || StringUtils.isEmpty(answer)) {
             return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
         }
 
         Question question = questionService.save(CourseEnum.getCourseEnum(courseType).getCode(),
-                QuestionEnum.getQuestionEnum(questionType).getCode(), stem, questionChoice,answer, teacher.getId(), point);
+                QuestionEnum.getQuestionEnum(questionType).getCode(), stem, questionChoice, answer, teacher.getId(),
+                point, questionImage, questionAudio, questionVideo);
 
         return ResultResponse.success(question);
     }
@@ -63,13 +67,13 @@ public class QuestionController extends AbstractUserController {
             return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
         }
 
-        Page pageParam = new Page(row,page);
+        Page pageParam = new Page(row, page);
 
-        return ResultResponse.success(questionService.getByTeacherId(teacher.getId(),pageParam));
+        return ResultResponse.success(questionService.getByTeacherId(teacher.getId(), pageParam));
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultResponse<?> updateQuestion(@RequestBody JSONObject params,HttpServletRequest request) {
+    public ResultResponse<?> updateQuestion(@RequestBody JSONObject params, HttpServletRequest request) {
         Teacher teacher = getUser(request);
         Integer questionId = params.getInteger("questionId");
         String stem = params.getString("stem");
@@ -85,16 +89,16 @@ public class QuestionController extends AbstractUserController {
         question.setTeacherId(teacher.getId());
         List<Question> questionList = questionService.select(question);
         Question questionOld = questionService.selectByPrimaryKey(questionId);
-        if(!questionList.contains(questionOld)) {
-            return ResultResponse.define(ErrorCode.NOT_AUTH.getCode(),ErrorCode.NOT_AUTH.getMsg());
+        if (!questionList.contains(questionOld)) {
+            return ResultResponse.define(ErrorCode.NOT_AUTH.getCode(), ErrorCode.NOT_AUTH.getMsg());
         }
-        Question questionNew = questionService.update(questionOld, stem,questionChoice, answer, point);
+        Question questionNew = questionService.update(questionOld, stem, questionChoice, answer, point);
 
         return ResultResponse.success(questionNew);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResultResponse<?> deleteQuestions(@RequestBody JSONObject params,HttpServletRequest request) {
+    public ResultResponse<?> deleteQuestions(@RequestBody JSONObject params, HttpServletRequest request) {
         Teacher teacher = getUser(request);
         List<Integer> questionIds = params.getJSONArray("questionIds").toJavaList(Integer.class);
         if (null == questionIds) {
@@ -107,9 +111,9 @@ public class QuestionController extends AbstractUserController {
         Question question = new Question();
         question.setTeacherId(teacher.getId());
         List<Question> questionList = questionService.select(question);
-        for(Question q : questions){
-            if(!questionList.contains(q)) {
-                return ResultResponse.define(ErrorCode.NOT_AUTH.getCode(),ErrorCode.NOT_AUTH.getMsg());
+        for (Question q : questions) {
+            if (!questionList.contains(q)) {
+                return ResultResponse.define(ErrorCode.NOT_AUTH.getCode(), ErrorCode.NOT_AUTH.getMsg());
             }
         }
         questionService.deleteByIds(questionIds);
@@ -119,8 +123,8 @@ public class QuestionController extends AbstractUserController {
 
     @IgnoreUserToken
     @RequestMapping(value = "/get", method = RequestMethod.POST)
-    public ResultResponse<?> getQuestions(@RequestBody JSONObject params,HttpServletRequest request) {
-//        Teacher teacher = getUser(request);
+    public ResultResponse<?> getQuestions(@RequestBody JSONObject params, HttpServletRequest request) {
+        // Teacher teacher = getUser(request);
         List<Integer> questionIds = params.getJSONArray("questionIds").toJavaList(Integer.class);
 
         if (null == questionIds) {
@@ -130,14 +134,14 @@ public class QuestionController extends AbstractUserController {
             return ResultResponse.define(ErrorCode.PARAM_ERROR.getCode(), ErrorCode.PARAM_ERROR.getMsg());
         }
         List<Question> questions = questionService.getByIds(questionIds);
-//        Question question = new Question();
-//        question.setTeacherId(teacher.getId());
-//        List<Question> questionList = questionService.select(question);
-//        for(Question q : questions){
-//            if(!questionList.contains(q)) {
-//                return ResultResponse.define(ErrorCode.NOT_AUTH.getCode(),ErrorCode.NOT_AUTH.getMsg());
-//            }
-//        }
+        // Question question = new Question();
+        // question.setTeacherId(teacher.getId());
+        // List<Question> questionList = questionService.select(question);
+        // for(Question q : questions){
+        // if(!questionList.contains(q)) {
+        // return ResultResponse.define(ErrorCode.NOT_AUTH.getCode(),ErrorCode.NOT_AUTH.getMsg());
+        // }
+        // }
         return ResultResponse.success(questions);
     }
 

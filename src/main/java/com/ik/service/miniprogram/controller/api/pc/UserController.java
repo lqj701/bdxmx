@@ -58,7 +58,7 @@ public class UserController extends AbstractUserController {
                     ErrorCode.PHONE_ALREADY_REGISTER.getMsg());
         }
 
-        accountService.register(phone, password, name, email, avatarUrl, gendar);
+        account = accountService.register(phone, password, name, email, avatarUrl, gendar);
         teacherService.save(account, CourseEnum.getCourseEnum(type).getCode());
 
         return ResultResponse.success();

@@ -19,6 +19,9 @@
         <result column="qu_question_stem" property="questionStem" jdbcType="LONGVARCHAR" />
         <result column="qu_question_choice" property="questionChoice" jdbcType="LONGVARCHAR" />
         <result column="qu_question_answer" property="questionAnswer" jdbcType="LONGVARCHAR" />
+        <result column="qu_question_audio" property="questionAudio" jdbcType="LONGVARCHAR" />
+        <result column="qu_question_image" property="questionImage" jdbcType="LONGVARCHAR" />
+        <result column="qu_question_video" property="questionVideo" jdbcType="LONGVARCHAR" />
     </resultMap>
     
     <sql id="Base_Column_List" >
@@ -27,7 +30,8 @@
     </sql>
     
     <sql id="Blob_Column_List" >
-        qu.question_stem as qu_question_stem, qu.question_choice as qu_question_choice, qu.question_answer as qu_question_answer
+        qu.question_stem as qu_question_stem, qu.question_choice as qu_question_choice, qu.question_answer as qu_question_answer, 
+        qu.question_audio as qu_question_audio, qu.question_image as qu_question_image, qu.question_video as qu_question_video
     </sql>
     
     <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
@@ -47,11 +51,13 @@
     <insert id="insert" parameterType="com.ik.service.miniprogram.model.Question" useGeneratedKeys="true" keyProperty="id" >
         insert into questions (teacher_id, point, course_type, 
           question_type, created_at, updated_at, 
-          question_stem, question_choice, question_answer
+          question_stem, question_choice, question_answer, 
+          question_audio, question_image, question_video
           )
         values (#{teacherId,jdbcType=INTEGER}, #{point,jdbcType=REAL}, #{courseType,jdbcType=INTEGER}, 
           #{questionType,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
-          #{questionStem,jdbcType=LONGVARCHAR}, #{questionChoice,jdbcType=LONGVARCHAR}, #{questionAnswer,jdbcType=LONGVARCHAR}
+          #{questionStem,jdbcType=LONGVARCHAR}, #{questionChoice,jdbcType=LONGVARCHAR}, #{questionAnswer,jdbcType=LONGVARCHAR}, 
+          #{questionAudio,jdbcType=LONGVARCHAR}, #{questionImage,jdbcType=LONGVARCHAR}, #{questionVideo,jdbcType=LONGVARCHAR}
           )
     </insert>
     
@@ -85,6 +91,15 @@
             <if test="questionAnswer != null" >
                 question_answer,
             </if>
+            <if test="questionAudio != null" >
+                question_audio,
+            </if>
+            <if test="questionImage != null" >
+                question_image,
+            </if>
+            <if test="questionVideo != null" >
+                question_video,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="teacherId != null" >
@@ -113,6 +128,15 @@
             </if>
             <if test="questionAnswer != null" >
                 #{questionAnswer,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="questionAudio != null" >
+                #{questionAudio,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="questionImage != null" >
+                #{questionImage,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="questionVideo != null" >
+                #{questionVideo,jdbcType=LONGVARCHAR},
             </if>
         </trim>
     </insert>
@@ -146,6 +170,15 @@
             </if>
             <if test="questionAnswer != null" >
                 question_answer = #{questionAnswer,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="questionAudio != null" >
+                question_audio = #{questionAudio,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="questionImage != null" >
+                question_image = #{questionImage,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="questionVideo != null" >
+                question_video = #{questionVideo,jdbcType=LONGVARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -195,6 +228,15 @@
                 <if test="model.questionAnswer != null" >
                     and qu.question_answer = #{model.questionAnswer}
                 </if>
+                <if test="model.questionAudio != null" >
+                    and qu.question_audio = #{model.questionAudio}
+                </if>
+                <if test="model.questionImage != null" >
+                    and qu.question_image = #{model.questionImage}
+                </if>
+                <if test="model.questionVideo != null" >
+                    and qu.question_video = #{model.questionVideo}
+                </if>
             </if>
         </where>
     </sql>
@@ -242,13 +284,15 @@
         insert into questions (
             teacher_id, point, course_type, 
             question_type, created_at, updated_at, 
-            question_stem, question_choice, question_answer
+            question_stem, question_choice, question_answer, 
+            question_audio, question_image, question_video
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
         (
             #{item.teacherId}, #{item.point}, #{item.courseType}, 
             #{item.questionType}, #{item.createdAt}, #{item.updatedAt}, 
-            #{item.questionStem}, #{item.questionChoice}, #{item.questionAnswer}
+            #{item.questionStem}, #{item.questionChoice}, #{item.questionAnswer}, 
+            #{item.questionAudio}, #{item.questionImage}, #{item.questionVideo}
         )
         </foreach>
     </insert>

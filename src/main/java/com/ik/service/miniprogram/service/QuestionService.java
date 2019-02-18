@@ -16,11 +16,13 @@ import com.ik.service.miniprogram.model.Question;
  */
 public interface QuestionService extends GenericService<Question, Integer> {
 
-    Question save(Integer courseType, Integer questionType, String stem, String questionChoice,String answer, Integer teacherId, Float point);
+    Question save(Integer courseType, Integer questionType, String stem, String questionChoice, String answer,
+            Integer teacherId, Float point, String questionImage, String questionAudio, String questionVideo);
 
-    Question update(Question question, String stem, String questionChoice, String answer, Float point);
+    Question update(Question question, String stem, String questionChoice, String answer, Float point,
+            String questionImage, String questionAudio, String questionVideo);
 
     List<Question> getByIds(List<Integer> questionIds);
 
-    List<Question> getByTeacherId(Integer teacherId,Page page);
+    List<Question> getByTeacherId(Integer teacherId, Page page);
 }
