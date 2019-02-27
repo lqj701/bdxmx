@@ -35,7 +35,7 @@ public class FileController {
         for (MultipartFile file : files) {
             String fileName = UUID.randomUUID().toString().replaceAll("-", "") + "-" + file.getOriginalFilename();
             String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
-            String path = fileProperty.getPrefix() + "/tmp";
+            String path = "/tmp";
             if ("png".equalsIgnoreCase(fileType) || "jpg".equalsIgnoreCase(fileType)
                     || "jpeg".equalsIgnoreCase(fileType) || "gif".equalsIgnoreCase(fileType)
                     || "ico".equalsIgnoreCase(fileType)) {
@@ -56,8 +56,8 @@ public class FileController {
             } catch (IOException e) {
                 continue;
             }
-            jsonObject.put("url", fileProperty.getHost() + path + file.getOriginalFilename());
-            jsonObject.put("name", file.getOriginalFilename());
+            jsonObject.put("url", fileProperty.getHost() + "/" + fileName);
+            jsonObject.put("name", fileName);
             data.add(jsonObject);
         }
 
