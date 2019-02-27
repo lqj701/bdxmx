@@ -30,35 +30,37 @@ public class FileController {
     @RequestMapping(value = "multiFileUpload", method = RequestMethod.POST)
     public ResultResponse multiFileUpload(@RequestParam("file") MultipartFile[] files) {
         JSONArray data = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
         StringBuilder builder = new StringBuilder();
         for (MultipartFile file : files) {
             String fileName = UUID.randomUUID().toString().replaceAll("-", "") + "-" + file.getOriginalFilename();
             String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
             String path = "/tmp";
+            String relativePath = "";
             if ("png".equalsIgnoreCase(fileType) || "jpg".equalsIgnoreCase(fileType)
                     || "jpeg".equalsIgnoreCase(fileType) || "gif".equalsIgnoreCase(fileType)
                     || "ico".equalsIgnoreCase(fileType)) {
-                path = fileProperty.getPrefix() + fileProperty.getImage();
-            }
-            if ("mp3".equalsIgnoreCase(fileType) || "wav".equalsIgnoreCase(fileType)
+                relativePath = fileProperty.getImage();
+            } else if ("mp3".equalsIgnoreCase(fileType) || "wav".equalsIgnoreCase(fileType)
                     || "flac".equalsIgnoreCase(fileType)) {
-                path = fileProperty.getPrefix() + fileProperty.getAudio();
-            }
-            if ("rm".equalsIgnoreCase(fileType) || "rmvb".equalsIgnoreCase(fileType) || "avi".equalsIgnoreCase(fileType)
-                    || "wmv".equalsIgnoreCase(fileType) || "MKV".equalsIgnoreCase(fileType)
-                    || "MP4".equalsIgnoreCase(fileType) || "VOB".equalsIgnoreCase(fileType)
-                    || "MOV".equalsIgnoreCase(fileType) || "FLV".equalsIgnoreCase(fileType)) {
-                path = fileProperty.getPrefix() + fileProperty.getVideo();
+                relativePath = fileProperty.getAudio();
+            } else if ("rm".equalsIgnoreCase(fileType) || "rmvb".equalsIgnoreCase(fileType)
+                    || "avi".equalsIgnoreCase(fileType) || "wmv".equalsIgnoreCase(fileType)
+                    || "MKV".equalsIgnoreCase(fileType) || "MP4".equalsIgnoreCase(fileType)
+                    || "VOB".equalsIgnoreCase(fileType) || "MOV".equalsIgnoreCase(fileType)
+                    || "FLV".equalsIgnoreCase(fileType)) {
+                relativePath = fileProperty.getVideo();
+            } else {
+                relativePath = fileProperty.getTmp();
             }
             try {
-                file.transferTo(new File(path, fileName));
+                file.transferTo(new File(fileProperty.getPrefix() + relativePath, fileName));
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("url", fileProperty.getHost() + relativePath + "/" + fileName);
+                jsonObject.put("name", fileName);
+                data.add(jsonObject);
             } catch (IOException e) {
                 continue;
             }
-            jsonObject.put("url", fileProperty.getHost() + "/" + fileName);
-            jsonObject.put("name", fileName);
-            data.add(jsonObject);
         }
 
         return ResultResponse.success(data);

@@ -57,7 +57,8 @@ cros:
 
 files:
   host: files.bdxmx.com
-  prefix: /data/files/bdxmx/miniprogram/
-  video: videos
-  audio: audios
-  image: images
+  prefix: /data/files/bdxmx/miniprogram
+  video: /videos
+  audio: /audios
+  image: /images
+  tmp: /tmp

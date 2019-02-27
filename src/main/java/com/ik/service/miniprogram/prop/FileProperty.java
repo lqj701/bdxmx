@@ -11,6 +11,7 @@ public class FileProperty {
     private String video;
     private String audio;
     private String image;
+    private String tmp;
 
     public String getHost() {
         return host;
@@ -50,5 +51,13 @@ public class FileProperty {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getTmp() {
+        return tmp;
+    }
+
+    public void setTmp(String tmp) {
+        this.tmp = tmp;
     }
 }
