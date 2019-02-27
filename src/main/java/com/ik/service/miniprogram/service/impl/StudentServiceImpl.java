@@ -26,4 +26,5 @@ public class StudentServiceImpl extends GenericServiceImpl<Student, Integer, Stu
     public StudentMapper getGenericMapper() {
         return studentMapper;
     }
+
 }

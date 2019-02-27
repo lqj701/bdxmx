@@ -25,6 +25,12 @@ public class TeacherStudentMap extends BaseModel<Integer> implements Serializabl
     private Integer studentId;
 
     /**
+     * 审核状态，0：未通过；1：通过
+     * audit_status
+     */
+    private Boolean auditStatus;
+
+    /**
      * 创建时间
      * created_at
      */
@@ -75,6 +81,24 @@ public class TeacherStudentMap extends BaseModel<Integer> implements Serializabl
     }
 
     /**
+     * 审核状态，0：未通过；1：通过
+     * audit_status
+     */
+    public Boolean getAuditStatus() {
+        return auditStatus;
+    }
+
+    /**
+     * 审核状态，0：未通过；1：通过
+     * audit_status
+     *
+     * @param auditStatus 审核状态，0：未通过；1：通过
+     */
+    public void setAuditStatus(Boolean auditStatus) {
+        this.auditStatus = auditStatus;
+    }
+
+    /**
      * 创建时间
      * created_at
      */
@@ -119,6 +143,7 @@ public class TeacherStudentMap extends BaseModel<Integer> implements Serializabl
         sb.append(", id=").append(id);
         sb.append(", teacherId=").append(teacherId);
         sb.append(", studentId=").append(studentId);
+        sb.append(", auditStatus=").append(auditStatus);
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
         sb.append("]");

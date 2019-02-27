@@ -1,5 +1,8 @@
 package com.ik.service.miniprogram.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import org.mybatis.extend.generic.service.impl.GenericServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +21,28 @@ import com.ik.service.miniprogram.service.TeacherStudentMapService;
  */
 @Service
 @Transactional
-public class TeacherStudentMapServiceImpl extends GenericServiceImpl<TeacherStudentMap, Integer, TeacherStudentMapMapper> implements TeacherStudentMapService {
+public class TeacherStudentMapServiceImpl extends
+        GenericServiceImpl<TeacherStudentMap, Integer, TeacherStudentMapMapper> implements TeacherStudentMapService {
     @Autowired
     private TeacherStudentMapMapper teacherStudentMapMapper;
 
     @Override
     public TeacherStudentMapMapper getGenericMapper() {
         return teacherStudentMapMapper;
+    }
+
+    @Override
+    public void saveStudentTeacherMap(Integer studentId, List<Integer> teacherIds) {
+        teacherIds.stream().forEach(teacherId -> {
+            TeacherStudentMap teacherStudentMap = new TeacherStudentMap();
+            teacherStudentMap.setAuditStatus(false);
+            teacherStudentMap.setStudentId(studentId);
+            teacherStudentMap.setTeacherId(teacherId);
+            teacherStudentMap.setCreatedAt(new Date());
+            teacherStudentMap.setUpdatedAt(new Date());
+
+            teacherStudentMapMapper.insertSelective(teacherStudentMap);
+        });
+
     }
 }

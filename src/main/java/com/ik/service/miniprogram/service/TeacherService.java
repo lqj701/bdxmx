@@ -24,4 +24,6 @@ public interface TeacherService extends GenericService<Teacher, Integer> {
     Teacher save(Account account, Integer type);
 
     Teacher update(Account account, Integer type);
+
+    List<Teacher> getAllTeacherList(Integer pageSize, Integer PageNum, Integer courseType);
 }

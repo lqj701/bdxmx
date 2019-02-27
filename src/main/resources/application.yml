@@ -54,3 +54,10 @@ spring:
 cros:
   origins:
     - http://api.bdxmx.com/
+
+files:
+  host: files.bdxmx.com
+  prefix: /data/files/bdxmx/miniprogram/
+  video: videos
+  audio: audios
+  image: images

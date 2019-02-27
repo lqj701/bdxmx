@@ -1,10 +1,15 @@
 package com.ik.service.miniprogram.controller.api.pc;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,10 +22,10 @@ import com.ik.service.miniprogram.annotation.IgnoreUserToken;
 import com.ik.service.miniprogram.constants.CourseEnum;
 import com.ik.service.miniprogram.constants.ErrorCode;
 import com.ik.service.miniprogram.model.Account;
+import com.ik.service.miniprogram.model.Student;
 import com.ik.service.miniprogram.model.Teacher;
-import com.ik.service.miniprogram.service.AccountService;
-import com.ik.service.miniprogram.service.LoginService;
-import com.ik.service.miniprogram.service.TeacherService;
+import com.ik.service.miniprogram.model.TeacherStudentMap;
+import com.ik.service.miniprogram.service.*;
 
 
 @RestController
@@ -34,6 +39,10 @@ public class UserController extends AbstractUserController {
     private TeacherService teacherService;
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private TeacherStudentMapService teacherStudentMapService;
+    @Autowired
+    private StudentService studentService;
 
     @IgnoreUserToken
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -124,6 +133,62 @@ public class UserController extends AbstractUserController {
         } else {
             return ResultResponse.define(errorCode.getCode(), errorCode.getMsg());
         }
+    }
+
+    @IgnoreUserToken
+    @RequestMapping(value = "/getMyStudents", method = RequestMethod.POST)
+    public ResultResponse<?> getMyStudents(@RequestBody JSONObject params, HttpServletRequest request) {
+        Teacher teacher = getUser(request);
+
+        TeacherStudentMap teacherStudentMap = new TeacherStudentMap();
+        teacherStudentMap.setTeacherId(teacher.getId());
+
+        List<TeacherStudentMap> teacherStudentMapList = teacherStudentMapService.select(teacherStudentMap);
+        List<Integer> studentIds = teacherStudentMapList.stream().map(t -> t.getStudentId())
+                .collect(Collectors.toList());
+
+        List<Student> students = Lists.newArrayList();
+        studentIds.stream().forEach(studentId -> {
+            students.add(studentService.selectByPrimaryKey(studentId));
+        });
+        return ResultResponse.success(students);
+    }
+
+    @IgnoreUserToken
+    @RequestMapping(value = "/review", method = RequestMethod.POST)
+    public ResultResponse<?> review(@RequestBody JSONObject params, HttpServletRequest request) {
+        Teacher teacher = getUser(request);
+        List<Integer> studentIds = params.getJSONArray("studentIds").toJavaList(Integer.class);
+
+        List<Integer> errorStudentIds = validateStudentIds(studentIds);
+        if (!CollectionUtils.isEmpty(errorStudentIds)) {
+            return ResultResponse.define(ErrorCode.STUDENTIDS_ERROR.getCode(),
+                    ErrorCode.STUDENTIDS_ERROR.getMsg() + "错误ID为: " + errorStudentIds.toString());
+        }
+
+        studentIds.stream().forEach(studentId -> {
+            TeacherStudentMap teacherStudentMap = new TeacherStudentMap();
+            teacherStudentMap.setTeacherId(teacher.getId());
+            teacherStudentMap.setStudentId(studentId);
+            teacherStudentMap = teacherStudentMapService.selectOne(teacherStudentMap);
+
+            if (teacherStudentMap != null) {
+                teacherStudentMap.setAuditStatus(true);
+                teacherStudentMapService.updateByPrimaryKeySelective(teacherStudentMap);
+            }
+        });
+
+        return ResultResponse.success();
+    }
+
+    private List<Integer> validateStudentIds(List<Integer> studentIds) {
+        List<Integer> errorList = Lists.newArrayList();
+        studentIds.stream().forEach(studentId -> {
+            if (studentService.selectByPrimaryKey(studentId) == null) {
+                errorList.add(studentId);
+            }
+        });
+        return errorList;
     }
 
 }

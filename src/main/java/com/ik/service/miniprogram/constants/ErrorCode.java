@@ -37,7 +37,11 @@ public enum ErrorCode {
 
     NOT_AUTH(200015, "没有权限"),
 
-    PHONE_ALREADY_REGISTER(200016, "手机号已注册");
+    PHONE_ALREADY_REGISTER(200016, "手机号已注册"),
+
+    TEACHERIDS_ERROR(200017, "teacherIds错误"),
+
+    STUDENTIDS_ERROR(200018, "studentIds错误");
 
     private int code;
     private String msg;

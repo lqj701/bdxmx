@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.mybatis.extend.generic.service.impl.GenericServiceImpl;
+import org.mybatis.extend.page.param.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +50,7 @@ public class TeacherServiceImpl extends GenericServiceImpl<Teacher, Integer, Tea
 
     @Override
     public Teacher findTeacherByAccessToken(String userToken) {
-//        return teacherMapper.findTeacherByAccessToken(userToken);
+        // return teacherMapper.findTeacherByAccessToken(userToken);
         return null;
     }
 
@@ -78,5 +79,13 @@ public class TeacherServiceImpl extends GenericServiceImpl<Teacher, Integer, Tea
         teacherMapper.updateByPrimaryKeySelective(teacher);
 
         return teacher;
+    }
+
+    @Override
+    public List<Teacher> getAllTeacherList(Integer pageSize, Integer PageNum, Integer courseType) {
+        Page page = new Page(PageNum, pageSize);
+
+        return teacherMapper.getAllTeacherList(page, courseType);
+
     }
 }
