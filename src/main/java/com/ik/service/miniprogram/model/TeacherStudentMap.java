@@ -25,7 +25,7 @@ public class TeacherStudentMap extends BaseModel<Integer> implements Serializabl
     private Integer studentId;
 
     /**
-     * 审核状态，0：未通过；1：通过
+     * 审核状态
      * audit_status
      */
     private Boolean auditStatus;
@@ -81,7 +81,7 @@ public class TeacherStudentMap extends BaseModel<Integer> implements Serializabl
     }
 
     /**
-     * 审核状态，0：未通过；1：通过
+     * 审核状态
      * audit_status
      */
     public Boolean getAuditStatus() {
@@ -89,10 +89,10 @@ public class TeacherStudentMap extends BaseModel<Integer> implements Serializabl
     }
 
     /**
-     * 审核状态，0：未通过；1：通过
+     * 审核状态
      * audit_status
      *
-     * @param auditStatus 审核状态，0：未通过；1：通过
+     * @param auditStatus 审核状态
      */
     public void setAuditStatus(Boolean auditStatus) {
         this.auditStatus = auditStatus;

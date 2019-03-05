@@ -22,7 +22,7 @@ spring:
         encoding.charset: UTF-8
     datasource:
         name: ik
-        url: jdbc:mysql://localhost:3306/bdxmx_miniprogram?characterEncoding=utf8&autoReconnect=true
+        url: jdbc:mysql://47.110.130.124:3306/bdxmx_miniprogram?characterEncoding=utf8&autoReconnect=true
         username: root
         password: root
         type: com.alibaba.druid.pool.DruidDataSource

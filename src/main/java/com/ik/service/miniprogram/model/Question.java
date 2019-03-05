@@ -67,19 +67,19 @@ public class Question extends BaseModel<Integer> implements Serializable {
     private String questionAnswer;
 
     /**
-     * 音频--json
+     * 
      * question_audio
      */
     private String questionAudio;
 
     /**
-     * 图片--json
+     * 
      * question_image
      */
     private String questionImage;
 
     /**
-     * 视频--json
+     * 
      * question_video
      */
     private String questionVideo;
@@ -249,7 +249,7 @@ public class Question extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 音频--json
+     * 
      * question_audio
      */
     public String getQuestionAudio() {
@@ -257,17 +257,17 @@ public class Question extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 音频--json
+     * 
      * question_audio
      *
-     * @param questionAudio 音频--json
+     * @param questionAudio 
      */
     public void setQuestionAudio(String questionAudio) {
         this.questionAudio = questionAudio;
     }
 
     /**
-     * 图片--json
+     * 
      * question_image
      */
     public String getQuestionImage() {
@@ -275,17 +275,17 @@ public class Question extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 图片--json
+     * 
      * question_image
      *
-     * @param questionImage 图片--json
+     * @param questionImage 
      */
     public void setQuestionImage(String questionImage) {
         this.questionImage = questionImage;
     }
 
     /**
-     * 视频--json
+     * 
      * question_video
      */
     public String getQuestionVideo() {
@@ -293,10 +293,10 @@ public class Question extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 视频--json
+     * 
      * question_video
      *
-     * @param questionVideo 视频--json
+     * @param questionVideo 
      */
     public void setQuestionVideo(String questionVideo) {
         this.questionVideo = questionVideo;

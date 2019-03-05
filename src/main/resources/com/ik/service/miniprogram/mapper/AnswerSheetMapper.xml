@@ -6,31 +6,33 @@
     -->
     
     <resultMap id="BaseResultMap" type="com.ik.service.miniprogram.model.AnswerSheet" >
-        <id column="as_id" property="id" jdbcType="INTEGER" />
-        <result column="as_paper_id" property="paperId" jdbcType="INTEGER" />
-        <result column="as_student_id" property="studentId" jdbcType="INTEGER" />
-        <result column="as_teacher_id" property="teacherId" jdbcType="INTEGER" />
-        <result column="as_score" property="score" jdbcType="INTEGER" />
-        <result column="as_started_at" property="startedAt" jdbcType="TIMESTAMP" />
-        <result column="as_completed_at" property="completedAt" jdbcType="TIMESTAMP" />
-        <result column="as_created_at" property="createdAt" jdbcType="TIMESTAMP" />
-        <result column="as_updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+        <id column="ans_id" property="id" jdbcType="INTEGER" />
+        <result column="ans_paper_id" property="paperId" jdbcType="INTEGER" />
+        <result column="ans_student_id" property="studentId" jdbcType="INTEGER" />
+        <result column="ans_teacher_id" property="teacherId" jdbcType="INTEGER" />
+        <result column="ans_score" property="score" jdbcType="REAL" />
+        <result column="ans_started_at" property="startedAt" jdbcType="TIMESTAMP" />
+        <result column="ans_completed_at" property="completedAt" jdbcType="TIMESTAMP" />
+        <result column="ans_created_at" property="createdAt" jdbcType="TIMESTAMP" />
+        <result column="ans_updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
     </resultMap>
     
     <resultMap id="ResultMapWithBLOBs" type="com.ik.service.miniprogram.model.AnswerSheet" extends="BaseResultMap" >
-        <result column="as_questions" property="questions" jdbcType="LONGVARCHAR" />
-        <result column="as_answers" property="answers" jdbcType="LONGVARCHAR" />
-        <result column="as_remark" property="remark" jdbcType="LONGVARCHAR" />
+        <result column="ans_questions" property="questions" jdbcType="LONGVARCHAR" />
+        <result column="ans_student_answer" property="studentAnswer" jdbcType="LONGVARCHAR" />
+        <result column="ans_teacher_correction" property="teacherCorrection" jdbcType="LONGVARCHAR" />
+        <result column="ans_remark" property="remark" jdbcType="LONGVARCHAR" />
     </resultMap>
     
     <sql id="Base_Column_List" >
-        as.id as as_id, as.paper_id as as_paper_id, as.student_id as as_student_id, as.teacher_id as as_teacher_id, 
-        as.score as as_score, as.started_at as as_started_at, as.completed_at as as_completed_at, 
-        as.created_at as as_created_at, as.updated_at as as_updated_at
+        ans.id as ans_id, ans.paper_id as ans_paper_id, ans.student_id as ans_student_id, 
+        ans.teacher_id as ans_teacher_id, ans.score as ans_score, ans.started_at as ans_started_at, 
+        ans.completed_at as ans_completed_at, ans.created_at as ans_created_at, ans.updated_at as ans_updated_at
     </sql>
     
     <sql id="Blob_Column_List" >
-        as.questions as as_questions, as.answers as as_answers, as.remark as as_remark
+        ans.questions as ans_questions, ans.student_answer as ans_student_answer, ans.teacher_correction as ans_teacher_correction, 
+        ans.remark as ans_remark
     </sql>
     
     <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
@@ -38,8 +40,8 @@
         <include refid="Base_Column_List" />
         ,
         <include refid="Blob_Column_List" />
-        from answer_sheets as
-        where as.id = #{id,jdbcType=INTEGER}
+        from answer_sheets ans
+        where ans.id = #{id,jdbcType=INTEGER}
     </select>
     
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
@@ -51,11 +53,13 @@
         insert into answer_sheets (paper_id, student_id, teacher_id, 
           score, started_at, completed_at, 
           created_at, updated_at, questions, 
-          answers, remark)
+          student_answer, teacher_correction, 
+          remark)
         values (#{paperId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{teacherId,jdbcType=INTEGER}, 
-          #{score,jdbcType=INTEGER}, #{startedAt,jdbcType=TIMESTAMP}, #{completedAt,jdbcType=TIMESTAMP}, 
+          #{score,jdbcType=REAL}, #{startedAt,jdbcType=TIMESTAMP}, #{completedAt,jdbcType=TIMESTAMP}, 
           #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{questions,jdbcType=LONGVARCHAR}, 
-          #{answers,jdbcType=LONGVARCHAR}, #{remark,jdbcType=LONGVARCHAR})
+          #{studentAnswer,jdbcType=LONGVARCHAR}, #{teacherCorrection,jdbcType=LONGVARCHAR}, 
+          #{remark,jdbcType=LONGVARCHAR})
     </insert>
     
     <insert id="insertSelective" parameterType="com.ik.service.miniprogram.model.AnswerSheet" useGeneratedKeys="true" keyProperty="id" >
@@ -88,8 +92,11 @@
             <if test="questions != null" >
                 questions,
             </if>
-            <if test="answers != null" >
-                answers,
+            <if test="studentAnswer != null" >
+                student_answer,
+            </if>
+            <if test="teacherCorrection != null" >
+                teacher_correction,
             </if>
             <if test="remark != null" >
                 remark,
@@ -106,7 +113,7 @@
                 #{teacherId,jdbcType=INTEGER},
             </if>
             <if test="score != null" >
-                #{score,jdbcType=INTEGER},
+                #{score,jdbcType=REAL},
             </if>
             <if test="startedAt != null" >
                 #{startedAt,jdbcType=TIMESTAMP},
@@ -123,8 +130,11 @@
             <if test="questions != null" >
                 #{questions,jdbcType=LONGVARCHAR},
             </if>
-            <if test="answers != null" >
-                #{answers,jdbcType=LONGVARCHAR},
+            <if test="studentAnswer != null" >
+                #{studentAnswer,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="teacherCorrection != null" >
+                #{teacherCorrection,jdbcType=LONGVARCHAR},
             </if>
             <if test="remark != null" >
                 #{remark,jdbcType=LONGVARCHAR},
@@ -145,7 +155,7 @@
                 teacher_id = #{teacherId,jdbcType=INTEGER},
             </if>
             <if test="score != null" >
-                score = #{score,jdbcType=INTEGER},
+                score = #{score,jdbcType=REAL},
             </if>
             <if test="startedAt != null" >
                 started_at = #{startedAt,jdbcType=TIMESTAMP},
@@ -162,8 +172,11 @@
             <if test="questions != null" >
                 questions = #{questions,jdbcType=LONGVARCHAR},
             </if>
-            <if test="answers != null" >
-                answers = #{answers,jdbcType=LONGVARCHAR},
+            <if test="studentAnswer != null" >
+                student_answer = #{studentAnswer,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="teacherCorrection != null" >
+                teacher_correction = #{teacherCorrection,jdbcType=LONGVARCHAR},
             </if>
             <if test="remark != null" >
                 remark = #{remark,jdbcType=LONGVARCHAR},
@@ -177,7 +190,7 @@
         set paper_id = #{paperId,jdbcType=INTEGER},
           student_id = #{studentId,jdbcType=INTEGER},
           teacher_id = #{teacherId,jdbcType=INTEGER},
-          score = #{score,jdbcType=INTEGER},
+          score = #{score,jdbcType=REAL},
           started_at = #{startedAt,jdbcType=TIMESTAMP},
           completed_at = #{completedAt,jdbcType=TIMESTAMP},
           created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -189,40 +202,43 @@
         <where >
             <if test="model != null" >
                 <if test="model.id != null" >
-                    and as.id = #{model.id}
+                    and ans.id = #{model.id}
                 </if>
                 <if test="model.paperId != null" >
-                    and as.paper_id = #{model.paperId}
+                    and ans.paper_id = #{model.paperId}
                 </if>
                 <if test="model.studentId != null" >
-                    and as.student_id = #{model.studentId}
+                    and ans.student_id = #{model.studentId}
                 </if>
                 <if test="model.teacherId != null" >
-                    and as.teacher_id = #{model.teacherId}
+                    and ans.teacher_id = #{model.teacherId}
                 </if>
                 <if test="model.score != null" >
-                    and as.score = #{model.score}
+                    and ans.score = #{model.score}
                 </if>
                 <if test="model.startedAt != null" >
-                    and as.started_at = #{model.startedAt}
+                    and ans.started_at = #{model.startedAt}
                 </if>
                 <if test="model.completedAt != null" >
-                    and as.completed_at = #{model.completedAt}
+                    and ans.completed_at = #{model.completedAt}
                 </if>
                 <if test="model.createdAt != null" >
-                    and as.created_at = #{model.createdAt}
+                    and ans.created_at = #{model.createdAt}
                 </if>
                 <if test="model.updatedAt != null" >
-                    and as.updated_at = #{model.updatedAt}
+                    and ans.updated_at = #{model.updatedAt}
                 </if>
                 <if test="model.questions != null" >
-                    and as.questions = #{model.questions}
+                    and ans.questions = #{model.questions}
                 </if>
-                <if test="model.answers != null" >
-                    and as.answers = #{model.answers}
+                <if test="model.studentAnswer != null" >
+                    and ans.student_answer = #{model.studentAnswer}
+                </if>
+                <if test="model.teacherCorrection != null" >
+                    and ans.teacher_correction = #{model.teacherCorrection}
                 </if>
                 <if test="model.remark != null" >
-                    and as.remark = #{model.remark}
+                    and ans.remark = #{model.remark}
                 </if>
             </if>
         </where>
@@ -231,7 +247,7 @@
     <select id="select" resultMap="ResultMapWithBLOBs" parameterType="com.ik.service.miniprogram.model.AnswerSheet" >
         select
         <include refid="Base_Column_List" />, <include refid="Blob_Column_List" />
-        from answer_sheets as
+        from answer_sheets ans
         <include refid="model_where_clause"/>
         <if test="model == null" >
             where 0 = 1
@@ -244,7 +260,7 @@
     <select id="selectOne" resultMap="ResultMapWithBLOBs" parameterType="com.ik.service.miniprogram.model.AnswerSheet" >
         select
         <include refid="Base_Column_List" />, <include refid="Blob_Column_List" />
-        from answer_sheets as
+        from answer_sheets ans
         <include refid="model_where_clause"/>
         limit 1
     </select>
@@ -252,7 +268,7 @@
     <select id="selectPageList" resultMap="ResultMapWithBLOBs" parameterType="com.ik.service.miniprogram.model.AnswerSheet" >
         select
         <include refid="Base_Column_List" />, <include refid="Blob_Column_List" />
-        from answer_sheets as
+        from answer_sheets ans
         <include refid="model_where_clause"/>
         <if test="model.orderBy != null" >
              order by ${model.orderBy}
@@ -260,7 +276,7 @@
     </select>
     
     <select id="selectCount" parameterType="com.ik.service.miniprogram.model.AnswerSheet" resultType="java.lang.Integer" >
-        select count(1) from answer_sheets as
+        select count(1) from answer_sheets ans
         <include refid="model_where_clause"/>
         <if test="model.orderBy != null" >
              order by ${model.orderBy}
@@ -272,14 +288,14 @@
             paper_id, student_id, teacher_id, 
             score, started_at, completed_at, 
             created_at, updated_at, questions, 
-            answers, remark
+            student_answer, teacher_correction, remark
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
         (
             #{item.paperId}, #{item.studentId}, #{item.teacherId}, 
             #{item.score}, #{item.startedAt}, #{item.completedAt}, 
             #{item.createdAt}, #{item.updatedAt}, #{item.questions}, 
-            #{item.answers}, #{item.remark}
+            #{item.studentAnswer}, #{item.teacherCorrection}, #{item.remark}
         )
         </foreach>
     </insert>
