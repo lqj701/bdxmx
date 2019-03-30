@@ -32,8 +32,9 @@ public class MpUserController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping("/getStudent/{openid}")
-    public ResultResponse getAnswerSheets(@PathVariable String openid) {
+    @IgnoreUserToken
+    @GetMapping("/getStudentByOpenid/{openid}")
+    public ResultResponse getStudentByOpenid(@PathVariable String openid) {
         Student student = new Student();
         student.setOpenid(openid);
         student = studentService.selectOne(student);
