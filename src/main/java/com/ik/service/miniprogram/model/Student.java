@@ -13,7 +13,7 @@ import org.mybatis.extend.generic.model.BaseModel;
  */
 public class Student extends BaseModel<Integer> implements Serializable {
     /**
-     * 用户类型0：普通用户；1：管理员
+     * 年级
      * grade
      */
     private Integer grade;
@@ -43,6 +43,36 @@ public class Student extends BaseModel<Integer> implements Serializable {
     private String phone;
 
     /**
+     * 头像url
+     * avatar_url
+     */
+    private String avatarUrl;
+
+    /**
+     * 性别 1：男；2：女
+     * gender
+     */
+    private Integer gender;
+
+    /**
+     * 昵称
+     * nick_name
+     */
+    private String nickName;
+
+    /**
+     * 是否设置个人信息
+     * set_info
+     */
+    private Boolean setInfo;
+
+    /**
+     * 绑定老师的id
+     * binded_teacherIds
+     */
+    private String bindedTeacherids;
+
+    /**
      * 创建时间
      * created_at
      */
@@ -57,7 +87,7 @@ public class Student extends BaseModel<Integer> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 用户类型0：普通用户；1：管理员
+     * 年级
      * grade
      */
     public Integer getGrade() {
@@ -65,10 +95,10 @@ public class Student extends BaseModel<Integer> implements Serializable {
     }
 
     /**
-     * 用户类型0：普通用户；1：管理员
+     * 年级
      * grade
      *
-     * @param grade 用户类型0：普通用户；1：管理员
+     * @param grade 年级
      */
     public void setGrade(Integer grade) {
         this.grade = grade;
@@ -147,6 +177,96 @@ public class Student extends BaseModel<Integer> implements Serializable {
     }
 
     /**
+     * 头像url
+     * avatar_url
+     */
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    /**
+     * 头像url
+     * avatar_url
+     *
+     * @param avatarUrl 头像url
+     */
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    /**
+     * 性别 1：男；2：女
+     * gender
+     */
+    public Integer getGender() {
+        return gender;
+    }
+
+    /**
+     * 性别 1：男；2：女
+     * gender
+     *
+     * @param gender 性别 1：男；2：女
+     */
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    /**
+     * 昵称
+     * nick_name
+     */
+    public String getNickName() {
+        return nickName;
+    }
+
+    /**
+     * 昵称
+     * nick_name
+     *
+     * @param nickName 昵称
+     */
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    /**
+     * 是否设置个人信息
+     * set_info
+     */
+    public Boolean getSetInfo() {
+        return setInfo;
+    }
+
+    /**
+     * 是否设置个人信息
+     * set_info
+     *
+     * @param setInfo 是否设置个人信息
+     */
+    public void setSetInfo(Boolean setInfo) {
+        this.setInfo = setInfo;
+    }
+
+    /**
+     * 绑定老师的id
+     * binded_teacherIds
+     */
+    public String getBindedTeacherids() {
+        return bindedTeacherids;
+    }
+
+    /**
+     * 绑定老师的id
+     * binded_teacherIds
+     *
+     * @param bindedTeacherids 绑定老师的id
+     */
+    public void setBindedTeacherids(String bindedTeacherids) {
+        this.bindedTeacherids = bindedTeacherids;
+    }
+
+    /**
      * 创建时间
      * created_at
      */
@@ -194,6 +314,11 @@ public class Student extends BaseModel<Integer> implements Serializable {
         sb.append(", email=").append(email);
         sb.append(", openid=").append(openid);
         sb.append(", phone=").append(phone);
+        sb.append(", avatarUrl=").append(avatarUrl);
+        sb.append(", gender=").append(gender);
+        sb.append(", nickName=").append(nickName);
+        sb.append(", setInfo=").append(setInfo);
+        sb.append(", bindedTeacherids=").append(bindedTeacherids);
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
         sb.append("]");

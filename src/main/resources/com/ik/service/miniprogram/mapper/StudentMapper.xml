@@ -12,13 +12,20 @@
         <result column="st_email" property="email" jdbcType="VARCHAR" />
         <result column="st_openid" property="openid" jdbcType="VARCHAR" />
         <result column="st_phone" property="phone" jdbcType="VARCHAR" />
+        <result column="st_avatar_url" property="avatarUrl" jdbcType="VARCHAR" />
+        <result column="st_gender" property="gender" jdbcType="INTEGER" />
+        <result column="st_nick_name" property="nickName" jdbcType="VARCHAR" />
+        <result column="st_set_info" property="setInfo" jdbcType="BIT" />
+        <result column="st_binded_teacherIds" property="bindedTeacherids" jdbcType="VARCHAR" />
         <result column="st_created_at" property="createdAt" jdbcType="TIMESTAMP" />
         <result column="st_updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
     </resultMap>
     
     <sql id="Base_Column_List" >
         st.id as st_id, st.grade as st_grade, st.name as st_name, st.email as st_email, st.openid as st_openid, 
-        st.phone as st_phone, st.created_at as st_created_at, st.updated_at as st_updated_at
+        st.phone as st_phone, st.avatar_url as st_avatar_url, st.gender as st_gender, st.nick_name as st_nick_name, 
+        st.set_info as st_set_info, st.binded_teacherIds as st_binded_teacherIds, st.created_at as st_created_at, 
+        st.updated_at as st_updated_at
     </sql>
     
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -35,11 +42,15 @@
     
     <insert id="insert" parameterType="com.ik.service.miniprogram.model.Student" useGeneratedKeys="true" keyProperty="id" >
         insert into students (grade, name, email, 
-          openid, phone, created_at, 
-          updated_at)
+          openid, phone, avatar_url, 
+          gender, nick_name, set_info, 
+          binded_teacherIds, created_at, updated_at
+          )
         values (#{grade,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-          #{openid,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
-          #{updatedAt,jdbcType=TIMESTAMP})
+          #{openid,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, 
+          #{gender,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{setInfo,jdbcType=BIT}, 
+          #{bindedTeacherids,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
+          )
     </insert>
     
     <insert id="insertSelective" parameterType="com.ik.service.miniprogram.model.Student" useGeneratedKeys="true" keyProperty="id" >
@@ -59,6 +70,21 @@
             </if>
             <if test="phone != null" >
                 phone,
+            </if>
+            <if test="avatarUrl != null" >
+                avatar_url,
+            </if>
+            <if test="gender != null" >
+                gender,
+            </if>
+            <if test="nickName != null" >
+                nick_name,
+            </if>
+            <if test="setInfo != null" >
+                set_info,
+            </if>
+            <if test="bindedTeacherids != null" >
+                binded_teacherIds,
             </if>
             <if test="createdAt != null" >
                 created_at,
@@ -82,6 +108,21 @@
             </if>
             <if test="phone != null" >
                 #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="avatarUrl != null" >
+                #{avatarUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null" >
+                #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="nickName != null" >
+                #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="setInfo != null" >
+                #{setInfo,jdbcType=BIT},
+            </if>
+            <if test="bindedTeacherids != null" >
+                #{bindedTeacherids,jdbcType=VARCHAR},
             </if>
             <if test="createdAt != null" >
                 #{createdAt,jdbcType=TIMESTAMP},
@@ -110,6 +151,21 @@
             <if test="phone != null" >
                 phone = #{phone,jdbcType=VARCHAR},
             </if>
+            <if test="avatarUrl != null" >
+                avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null" >
+                gender = #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="nickName != null" >
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="setInfo != null" >
+                set_info = #{setInfo,jdbcType=BIT},
+            </if>
+            <if test="bindedTeacherids != null" >
+                binded_teacherIds = #{bindedTeacherids,jdbcType=VARCHAR},
+            </if>
             <if test="createdAt != null" >
                 created_at = #{createdAt,jdbcType=TIMESTAMP},
             </if>
@@ -127,6 +183,11 @@
           email = #{email,jdbcType=VARCHAR},
           openid = #{openid,jdbcType=VARCHAR},
           phone = #{phone,jdbcType=VARCHAR},
+          avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+          gender = #{gender,jdbcType=INTEGER},
+          nick_name = #{nickName,jdbcType=VARCHAR},
+          set_info = #{setInfo,jdbcType=BIT},
+          binded_teacherIds = #{bindedTeacherids,jdbcType=VARCHAR},
           created_at = #{createdAt,jdbcType=TIMESTAMP},
           updated_at = #{updatedAt,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
@@ -152,6 +213,21 @@
                 </if>
                 <if test="model.phone != null" >
                     and st.phone = #{model.phone}
+                </if>
+                <if test="model.avatarUrl != null" >
+                    and st.avatar_url = #{model.avatarUrl}
+                </if>
+                <if test="model.gender != null" >
+                    and st.gender = #{model.gender}
+                </if>
+                <if test="model.nickName != null" >
+                    and st.nick_name = #{model.nickName}
+                </if>
+                <if test="model.setInfo != null" >
+                    and st.set_info = #{model.setInfo}
+                </if>
+                <if test="model.bindedTeacherids != null" >
+                    and st.binded_teacherIds = #{model.bindedTeacherids}
                 </if>
                 <if test="model.createdAt != null" >
                     and st.created_at = #{model.createdAt}
@@ -205,14 +281,16 @@
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" >
         insert into students (
             grade, name, email, 
-            openid, phone, created_at, 
-            updated_at
+            openid, phone, avatar_url, 
+            gender, nick_name, set_info, 
+            binded_teacherIds, created_at, updated_at
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
         (
             #{item.grade}, #{item.name}, #{item.email}, 
-            #{item.openid}, #{item.phone}, #{item.createdAt}, 
-            #{item.updatedAt}
+            #{item.openid}, #{item.phone}, #{item.avatarUrl}, 
+            #{item.gender}, #{item.nickName}, #{item.setInfo}, 
+            #{item.bindedTeacherids}, #{item.createdAt}, #{item.updatedAt}
         )
         </foreach>
     </insert>

@@ -2,14 +2,18 @@ package com.ik.service.miniprogram.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.mybatis.extend.generic.service.impl.GenericServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ik.service.miniprogram.mapper.TeacherStudentMapMapper;
 import com.ik.service.miniprogram.model.TeacherStudentMap;
+import com.ik.service.miniprogram.service.StudentService;
 import com.ik.service.miniprogram.service.TeacherStudentMapService;
 
 /**
@@ -23,8 +27,11 @@ import com.ik.service.miniprogram.service.TeacherStudentMapService;
 @Transactional
 public class TeacherStudentMapServiceImpl extends
         GenericServiceImpl<TeacherStudentMap, Integer, TeacherStudentMapMapper> implements TeacherStudentMapService {
+    private static Logger logger = LoggerFactory.getLogger(TeacherStudentMapServiceImpl.class);
     @Autowired
     private TeacherStudentMapMapper teacherStudentMapMapper;
+    @Autowired
+    private StudentService studentService;
 
     @Override
     public TeacherStudentMapMapper getGenericMapper() {
@@ -35,13 +42,17 @@ public class TeacherStudentMapServiceImpl extends
     public void saveStudentTeacherMap(Integer studentId, List<Integer> teacherIds) {
         teacherIds.stream().forEach(teacherId -> {
             TeacherStudentMap teacherStudentMap = new TeacherStudentMap();
-            teacherStudentMap.setAuditStatus(false);
             teacherStudentMap.setStudentId(studentId);
             teacherStudentMap.setTeacherId(teacherId);
-            teacherStudentMap.setCreatedAt(new Date());
-            teacherStudentMap.setUpdatedAt(new Date());
+            teacherStudentMap = Optional.ofNullable(teacherStudentMapMapper.selectOne(teacherStudentMap))
+                    .orElse(teacherStudentMap);
 
-            teacherStudentMapMapper.insertSelective(teacherStudentMap);
+            if (teacherStudentMap.getId() == null) {
+                teacherStudentMap.setAuditStatus(false);
+                teacherStudentMap.setCreatedAt(new Date());
+                teacherStudentMap.setUpdatedAt(new Date());
+                teacherStudentMapMapper.insertSelective(teacherStudentMap);
+            }
         });
 
     }

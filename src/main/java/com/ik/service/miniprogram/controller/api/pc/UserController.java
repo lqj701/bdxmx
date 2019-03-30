@@ -60,8 +60,9 @@ public class UserController extends AbstractUserController {
             return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
         }
 
-        if(!CheckUtil.isMobile(phone)){
-            return ResultResponse.define(ErrorCode.REGISTER_FAILED_BECAUSE_ERROR_PHONE.getCode(),ErrorCode.REGISTER_FAILED_BECAUSE_ERROR_PHONE.getMsg());
+        if (!CheckUtil.isMobile(phone)) {
+            return ResultResponse.define(ErrorCode.REGISTER_FAILED_BECAUSE_ERROR_PHONE.getCode(),
+                    ErrorCode.REGISTER_FAILED_BECAUSE_ERROR_PHONE.getMsg());
         }
 
         Account query = new Account();
@@ -192,10 +193,27 @@ public class UserController extends AbstractUserController {
             if (teacherStudentMap != null) {
                 teacherStudentMap.setAuditStatus(true);
                 teacherStudentMapService.updateByPrimaryKeySelective(teacherStudentMap);
+
+                // 审核成功后更新student binded_teacherIds(触发更新操作)后面再加个定时任务刷新
+                updateStudent(studentId);
             }
         });
-
         return ResultResponse.success();
+    }
+
+    private void updateStudent(Integer studentId) {
+        Student student = studentService.selectByPrimaryKey(studentId);
+        TeacherStudentMap teacherStudentMap = new TeacherStudentMap();
+        teacherStudentMap.setStudentId(studentId);
+        List<TeacherStudentMap> teacherStudentMapList = teacherStudentMapService.select(teacherStudentMap);
+
+        List<Integer> teacherIds = teacherStudentMapList.stream().map(TeacherStudentMap::getTeacherId)
+                .collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(teacherIds)) {
+            Integer[] teacherIdsArray = teacherIds.toArray(new Integer[teacherIds.size()]);
+            student.setBindedTeacherids(StringUtils.join(teacherIdsArray, ","));
+            studentService.updateByPrimaryKeySelective(student);
+        }
     }
 
     private List<Integer> validateStudentIds(List<Integer> studentIds) {
