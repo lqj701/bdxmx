@@ -8,6 +8,5 @@
         SELECT
         <include refid="Base_Column_List"/>
         from teachers te
-        WHERE te.type = #{courseType}
     </select>
 </mapper>

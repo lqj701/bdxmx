@@ -14,4 +14,6 @@ import com.ik.service.miniprogram.vo.AnswerSheetRequest;
  */
 public interface AnswerSheetService extends GenericService<AnswerSheet, Integer> {
     void saveAnswerSheet(AnswerSheetRequest answerSheetRequest);
+
+    void reviseAnswerSheet(AnswerSheetRequest answerSheetRequest);
 }

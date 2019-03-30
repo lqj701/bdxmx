@@ -50,4 +50,15 @@ public class AnswerSheetServiceImpl extends GenericServiceImpl<AnswerSheet, Inte
         answerSheet.setUpdatedAt(new Date());
         answerSheetMapper.insertSelective(answerSheet);
     }
+
+    @Override
+    public void reviseAnswerSheet(AnswerSheetRequest answerSheetRequest) {
+        AnswerSheet answerSheet = answerSheetMapper.selectByPrimaryKey(answerSheetRequest.getId());
+        answerSheet.setScore(answerSheetRequest.getScore());
+        answerSheet.setTeacherCorrection(answerSheetRequest.getTeacherCorrection());
+        answerSheet.setRemark(answerSheetRequest.getRemark());
+
+        answerSheet.setUpdatedAt(new Date());
+        answerSheetMapper.updateByPrimaryKeySelective(answerSheet);
+    }
 }

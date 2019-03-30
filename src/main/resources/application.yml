@@ -8,6 +8,12 @@ server:
         accesslog:
             enabled: true
             basedir: /data/log/ik.miniprogram.com
+#    ssl:
+#      key-store:
+#        classpath: keystore.p12
+#      key-store-type: PKCS12
+#      key-alias: tomcat
+#      key-store-password: whbdxmx
 
 logging:
     classpath: logback.xml

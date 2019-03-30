@@ -82,10 +82,10 @@ public class TeacherServiceImpl extends GenericServiceImpl<Teacher, Integer, Tea
     }
 
     @Override
-    public List<Teacher> getAllTeacherList(Integer pageSize, Integer PageNum, Integer courseType) {
+    public List<Teacher> getAllTeacherList(Integer pageSize, Integer PageNum) {
         Page page = new Page(PageNum, pageSize);
 
-        return teacherMapper.getAllTeacherList(page, courseType);
+        return teacherMapper.getAllTeacherList(page);
 
     }
 }

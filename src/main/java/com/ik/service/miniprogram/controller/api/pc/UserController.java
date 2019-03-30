@@ -26,6 +26,7 @@ import com.ik.service.miniprogram.model.Student;
 import com.ik.service.miniprogram.model.Teacher;
 import com.ik.service.miniprogram.model.TeacherStudentMap;
 import com.ik.service.miniprogram.service.*;
+import com.ik.service.miniprogram.util.CheckUtil;
 
 
 @RestController
@@ -57,6 +58,10 @@ public class UserController extends AbstractUserController {
 
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(name) || null == type) {
             return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
+        }
+
+        if(!CheckUtil.isMobile(phone)){
+            return ResultResponse.define(ErrorCode.REGISTER_FAILED_BECAUSE_ERROR_PHONE.getCode(),ErrorCode.REGISTER_FAILED_BECAUSE_ERROR_PHONE.getMsg());
         }
 
         Account query = new Account();
@@ -135,6 +140,12 @@ public class UserController extends AbstractUserController {
         }
     }
 
+    /**
+     * 获取自己的学生
+     * @param params
+     * @param request
+     * @return
+     */
     @IgnoreUserToken
     @RequestMapping(value = "/getMyStudents", method = RequestMethod.POST)
     public ResultResponse<?> getMyStudents(@RequestBody JSONObject params, HttpServletRequest request) {
@@ -154,6 +165,12 @@ public class UserController extends AbstractUserController {
         return ResultResponse.success(students);
     }
 
+    /**
+     * 对提交绑定的学生审核
+     * @param params
+     * @param request
+     * @return
+     */
     @IgnoreUserToken
     @RequestMapping(value = "/review", method = RequestMethod.POST)
     public ResultResponse<?> review(@RequestBody JSONObject params, HttpServletRequest request) {

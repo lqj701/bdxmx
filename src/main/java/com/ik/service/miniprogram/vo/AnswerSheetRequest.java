@@ -7,6 +7,8 @@ import lombok.Data;
 
 @Data
 public class AnswerSheetRequest {
+    private Integer id;
+
     @NotNull(message = "paperId不可为空")
     private Integer paperId;
 
@@ -16,19 +18,16 @@ public class AnswerSheetRequest {
     @NotNull(message = "teacherId不可为空")
     private Integer teacherId;
 
-    @NotNull(message = "score不可为空")
     private Float score;
 
     @NotNull(message = "studentAnswer不可为空")
     private String studentAnswer;
 
-    @NotNull(message = "teacherCorrection不可为空")
     private String teacherCorrection;
 
     @NotNull(message = "questions不可为空")
     private String questions;
 
-    @NotNull(message = "remark不可为空")
     private String remark;
 
     @NotNull(message = "startedAt不可为空")
@@ -36,6 +35,14 @@ public class AnswerSheetRequest {
 
     @NotNull(message = "completedAt不可为空")
     private String completedAt;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getPaperId() {
         return paperId;

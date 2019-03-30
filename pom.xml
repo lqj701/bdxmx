@@ -14,12 +14,12 @@
     <parent>
         <groupId>com.ik.crm</groupId>
         <artifactId>ikcrm-parent</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
         <relativePath></relativePath>
     </parent>
 
     <properties>
-        <parent.version>1.2.1-SNAPSHOT</parent.version>
+        <parent.version>2.0.0-SNAPSHOT</parent.version>
         <qiniu.version>7.2.0</qiniu.version>
         <vdurmont.version>4.0.0</vdurmont.version>
     </properties>

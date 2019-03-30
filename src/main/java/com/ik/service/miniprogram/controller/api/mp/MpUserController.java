@@ -7,17 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ik.crm.commons.dto.ResultResponse;
 import com.ik.service.miniprogram.annotation.IgnoreUserToken;
-import com.ik.service.miniprogram.constants.CourseEnum;
 import com.ik.service.miniprogram.constants.ErrorCode;
+import com.ik.service.miniprogram.model.Student;
 import com.ik.service.miniprogram.model.Teacher;
+import com.ik.service.miniprogram.service.StudentService;
 import com.ik.service.miniprogram.service.TeacherService;
 import com.ik.service.miniprogram.service.TeacherStudentMapService;
 
@@ -31,15 +29,26 @@ public class MpUserController {
     @Autowired
     private TeacherStudentMapService teacherStudentMapService;
 
+    @Autowired
+    private StudentService studentService;
+
+    @GetMapping("/getStudent/{openid}")
+    public ResultResponse getAnswerSheets(@PathVariable String openid) {
+        Student student = new Student();
+        student.setOpenid(openid);
+        student = studentService.selectOne(student);
+
+        return ResultResponse.success(student);
+    }
+
+
     @IgnoreUserToken
     @RequestMapping(value = "/getTeacherList", method = RequestMethod.POST)
     public ResultResponse<?> getTeacherList(@RequestBody JSONObject params) {
         Integer page = params.getInteger("page");
         Integer row = params.getInteger("row");
-        Integer courseType = params.getInteger("courseType");
 
-        List<Teacher> teacherList = teacherService.getAllTeacherList(page, row,
-                CourseEnum.getCourseEnum(courseType).getCode());
+        List<Teacher> teacherList = teacherService.getAllTeacherList(page, row);
         return ResultResponse.success(teacherList);
     }
 
