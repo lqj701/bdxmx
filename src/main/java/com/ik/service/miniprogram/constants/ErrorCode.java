@@ -7,7 +7,7 @@ public enum ErrorCode {
 
     RESET_PASSWORD_SUCCESS(100002, "修改密码成功，请等待系统管理员审核！"),
 
-    REGISTER_FAILED_BECAUSE_ERROR_PHONE(100003,"注册失败，手机号码格式不正确"),
+    REGISTER_FAILED_BECAUSE_ERROR_PHONE(100003, "注册失败，手机号码格式不正确"),
 
     PARAM_IS_NULL(200001, "参数不可为空"),
 
@@ -43,7 +43,11 @@ public enum ErrorCode {
 
     TEACHERIDS_ERROR(200017, "teacherIds错误"),
 
-    STUDENTIDS_ERROR(200018, "studentIds错误");
+    STUDENTIDS_ERROR(200018, "studentIds错误"),
+
+    PHONE_ERROR(200019, "手机格式不正确"),
+
+    ALREADY_ENROLL(200020, "已报名");
 
     private int code;
     private String msg;

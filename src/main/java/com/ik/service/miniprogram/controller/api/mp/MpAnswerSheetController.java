@@ -9,6 +9,7 @@ import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ik.crm.commons.dto.ResultResponse;
 import com.ik.service.miniprogram.annotation.IgnoreUserToken;
 import com.ik.service.miniprogram.model.AnswerSheet;
@@ -16,6 +17,7 @@ import com.ik.service.miniprogram.model.ExamPaper;
 import com.ik.service.miniprogram.model.TeacherStudentMap;
 import com.ik.service.miniprogram.service.AnswerSheetService;
 import com.ik.service.miniprogram.service.ExamPaperService;
+import com.ik.service.miniprogram.service.TeacherService;
 import com.ik.service.miniprogram.service.TeacherStudentMapService;
 import com.ik.service.miniprogram.vo.AnswerSheetRequest;
 
@@ -29,6 +31,8 @@ public class MpAnswerSheetController {
     private TeacherStudentMapService teacherStudentMapService;
     @Autowired
     private ExamPaperService examPaperService;
+    @Autowired
+    private TeacherService teacherService;
 
     /**
      * 获取随机试卷列表
@@ -37,11 +41,11 @@ public class MpAnswerSheetController {
     @GetMapping("/getPapers")
     public ResultResponse getPapers() {
         List<ExamPaper> examPaperList = Lists.newArrayList();
-        for(int i=1;i<10;i++) {
+        for (int i = 1; i < 10; i++) {
             ExamPaper examPaper = new ExamPaper();
             examPaper.setPaperType(i);
             examPaper = examPaperService.selectOne(examPaper);
-            if(examPaper!=null) {
+            if (examPaper != null) {
                 examPaperList.add(examPaper);
             }
         }
@@ -57,10 +61,11 @@ public class MpAnswerSheetController {
         TeacherStudentMap teacherStudentMap = new TeacherStudentMap();
         teacherStudentMap.setStudentId(studentId);
         List<TeacherStudentMap> teacherStudentMapList = teacherStudentMapService.select(teacherStudentMap);
-        List<Integer> teacherIds = teacherStudentMapList.stream().map(TeacherStudentMap::getTeacherId).collect(Collectors.toList());
+        List<Integer> teacherIds = teacherStudentMapList.stream().map(TeacherStudentMap::getTeacherId)
+                .collect(Collectors.toList());
 
         List<ExamPaper> examPaperList = Lists.newArrayList();
-        teacherIds.stream().forEach(teacherId-> {
+        teacherIds.stream().forEach(teacherId -> {
             ExamPaper examPaper = new ExamPaper();
             examPaper.setTeacherId(teacherId);
             List<ExamPaper> examPapers = examPaperService.select(examPaper);
@@ -88,12 +93,26 @@ public class MpAnswerSheetController {
         query.setStudentId(studentId);
 
         List<AnswerSheet> answerSheetList = answerSheetService.select(query);
-        return ResultResponse.success(answerSheetList);
+        List<JSONObject> data = answerSheetList.stream().map(t -> {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("answerSheet", t);
+            jsonObject.put("setPerson", teacherService.selectByPrimaryKey(t.getTeacherId()).getName());
+            jsonObject.put("paperName", examPaperService.selectByPrimaryKey(t.getPaperId()).getName());
+            return jsonObject;
+        }).collect(Collectors.toList());
+
+        return ResultResponse.success(data);
     }
 
     @GetMapping("/getAnswerSheet/{answerSheetId}")
     public ResultResponse getAnswerSheet(@PathVariable Integer answerSheetId) {
-        return ResultResponse.success(answerSheetService.selectByPrimaryKey(answerSheetId));
+        AnswerSheet answerSheet = answerSheetService.selectByPrimaryKey(answerSheetId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("answerSheet", answerSheet);
+        jsonObject.put("setPerson", teacherService.selectByPrimaryKey(answerSheet.getTeacherId()).getName());
+        jsonObject.put("paperName", examPaperService.selectByPrimaryKey(answerSheet.getPaperId()).getName());
+
+        return ResultResponse.success(jsonObject);
     }
 
 }

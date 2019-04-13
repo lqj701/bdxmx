@@ -1,6 +1,7 @@
 package com.ik.service.miniprogram.controller.api.pc;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,23 +11,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.ik.crm.commons.dto.ResultResponse;
 import com.ik.crm.commons.util.StringUtils;
 import com.ik.service.miniprogram.annotation.IgnoreUserToken;
 import com.ik.service.miniprogram.constants.CourseEnum;
 import com.ik.service.miniprogram.constants.ErrorCode;
-import com.ik.service.miniprogram.model.Account;
-import com.ik.service.miniprogram.model.Student;
-import com.ik.service.miniprogram.model.Teacher;
-import com.ik.service.miniprogram.model.TeacherStudentMap;
+import com.ik.service.miniprogram.model.*;
 import com.ik.service.miniprogram.service.*;
 import com.ik.service.miniprogram.util.CheckUtil;
+import com.ik.service.miniprogram.util.PageUtil;
 
 
 @RestController
@@ -44,6 +41,8 @@ public class UserController extends AbstractUserController {
     private TeacherStudentMapService teacherStudentMapService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private EnrollInfoService enrollInfoService;
 
     @IgnoreUserToken
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -156,14 +155,18 @@ public class UserController extends AbstractUserController {
         teacherStudentMap.setTeacherId(teacher.getId());
 
         List<TeacherStudentMap> teacherStudentMapList = teacherStudentMapService.select(teacherStudentMap);
-        List<Integer> studentIds = teacherStudentMapList.stream().map(t -> t.getStudentId())
-                .collect(Collectors.toList());
 
-        List<Student> students = Lists.newArrayList();
-        studentIds.stream().forEach(studentId -> {
-            students.add(studentService.selectByPrimaryKey(studentId));
-        });
-        return ResultResponse.success(students);
+        List<JSONObject> data = teacherStudentMapList.stream().map(teacherStudentMap1 -> {
+            JSONObject jsonObject = new JSONObject();
+            Student student = studentService.selectByPrimaryKey(teacherStudentMap1.getStudentId());
+            if (Objects.nonNull(student)) {
+                jsonObject.put("student", student);
+                jsonObject.put("auditStaus", teacherStudentMap1.getAuditStatus());
+            }
+            return jsonObject;
+        }).filter(jsonObject -> !jsonObject.isEmpty()).collect(Collectors.toList());
+
+        return ResultResponse.success(data);
     }
 
     /**
@@ -172,7 +175,6 @@ public class UserController extends AbstractUserController {
      * @param request
      * @return
      */
-    @IgnoreUserToken
     @RequestMapping(value = "/review", method = RequestMethod.POST)
     public ResultResponse<?> review(@RequestBody JSONObject params, HttpServletRequest request) {
         Teacher teacher = getUser(request);
@@ -195,26 +197,24 @@ public class UserController extends AbstractUserController {
                 teacherStudentMapService.updateByPrimaryKeySelective(teacherStudentMap);
 
                 // 审核成功后更新student binded_teacherIds(触发更新操作)后面再加个定时任务刷新
-                updateStudent(studentId);
+                teacherStudentMapService.updateStudentBindedTeachers(studentId);
             }
         });
         return ResultResponse.success();
     }
 
-    private void updateStudent(Integer studentId) {
-        Student student = studentService.selectByPrimaryKey(studentId);
-        TeacherStudentMap teacherStudentMap = new TeacherStudentMap();
-        teacherStudentMap.setStudentId(studentId);
-        List<TeacherStudentMap> teacherStudentMapList = teacherStudentMapService.select(teacherStudentMap);
+    @RequestMapping(value = "/getEnrollInfo", method = RequestMethod.GET)
+    public ResultResponse<?> getEnrollInfo(HttpServletRequest request, @RequestParam Integer page,
+            @RequestParam Integer pageSize) {
+        EnrollInfo enrollInfo = new EnrollInfo();
+        List<EnrollInfo> enrollInfoList = enrollInfoService.select(enrollInfo);
 
-        List<Integer> teacherIds = teacherStudentMapList.stream().map(TeacherStudentMap::getTeacherId)
-                .collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(teacherIds)) {
-            Integer[] teacherIdsArray = teacherIds.toArray(new Integer[teacherIds.size()]);
-            student.setBindedTeacherids(StringUtils.join(teacherIdsArray, ","));
-            studentService.updateByPrimaryKeySelective(student);
-        }
+        PageUtil.start(page, pageSize);
+        PageInfo<EnrollInfo> pageInfo = new PageInfo<>(enrollInfoList);
+        JSONObject data = PageUtil.getReturnInfo(pageInfo, enrollInfoList);
+        return ResultResponse.success(data);
     }
+
 
     private List<Integer> validateStudentIds(List<Integer> studentIds) {
         List<Integer> errorList = Lists.newArrayList();

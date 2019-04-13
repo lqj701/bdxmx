@@ -15,4 +15,6 @@ import com.ik.service.miniprogram.model.TeacherStudentMap;
  */
 public interface TeacherStudentMapService extends GenericService<TeacherStudentMap, Integer> {
     void saveStudentTeacherMap(Integer studentId, List<Integer> teacherIds);
+
+    void updateStudentBindedTeachers(Integer studentId);
 }

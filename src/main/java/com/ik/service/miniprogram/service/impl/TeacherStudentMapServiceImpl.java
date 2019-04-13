@@ -3,6 +3,7 @@ package com.ik.service.miniprogram.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.mybatis.extend.generic.service.impl.GenericServiceImpl;
 import org.slf4j.Logger;
@@ -10,8 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import com.ik.crm.commons.util.StringUtils;
 import com.ik.service.miniprogram.mapper.TeacherStudentMapMapper;
+import com.ik.service.miniprogram.model.Student;
 import com.ik.service.miniprogram.model.TeacherStudentMap;
 import com.ik.service.miniprogram.service.StudentService;
 import com.ik.service.miniprogram.service.TeacherStudentMapService;
@@ -56,4 +60,21 @@ public class TeacherStudentMapServiceImpl extends
         });
 
     }
+
+    @Override
+    public void updateStudentBindedTeachers(Integer studentId) {
+        Student student = studentService.selectByPrimaryKey(studentId);
+        TeacherStudentMap teacherStudentMap = new TeacherStudentMap();
+        teacherStudentMap.setStudentId(studentId);
+        List<TeacherStudentMap> teacherStudentMapList = teacherStudentMapMapper.select(teacherStudentMap);
+
+        List<Integer> teacherIds = teacherStudentMapList.stream().map(TeacherStudentMap::getTeacherId)
+                .collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(teacherIds)) {
+            Integer[] teacherIdsArray = teacherIds.toArray(new Integer[teacherIds.size()]);
+            student.setBindedTeacherids(StringUtils.join(teacherIdsArray, ","));
+            studentService.updateByPrimaryKeySelective(student);
+        }
+    }
+
 }

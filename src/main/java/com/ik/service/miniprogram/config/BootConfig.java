@@ -2,12 +2,15 @@ package com.ik.service.miniprogram.config;
 
 import java.util.List;
 
+import javax.servlet.MultipartConfigElement;
+
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -98,5 +101,16 @@ public class BootConfig extends WebMvcConfigurerAdapter {
         connector.setSecure(false);
         connector.setRedirectPort(450); // application.properties中配置的https端口
         return connector;
+    }
+
+
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        // 单个文件最大
+        factory.setMaxFileSize("10240KB"); // KB,MB
+        /// 设置总上传数据总大小
+        factory.setMaxRequestSize("102400KB");
+        return factory.createMultipartConfig();
     }
 }

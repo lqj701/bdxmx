@@ -44,7 +44,7 @@ public class AnswerSheetServiceImpl extends GenericServiceImpl<AnswerSheet, Inte
         answerSheet.setTeacherCorrection(answerSheetRequest.getTeacherCorrection());
         answerSheet.setRemark(answerSheetRequest.getRemark());
         answerSheet.setStartedAt(DateUtils.parseDate(answerSheetRequest.getStartedAt()));
-        answerSheet.setCompletedAt(DateUtils.parseDate(answerSheetRequest.getCompletedAt()));
+        answerSheet.setCompletedAt(new Date());
 
         answerSheet.setCreatedAt(new Date());
         answerSheet.setUpdatedAt(new Date());
