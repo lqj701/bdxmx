@@ -68,3 +68,10 @@ files:
   audio: /audios
   image: /images
   tmp: /tmp
+
+rocketmq:
+  name-server: 47.110.130.124:9876
+  producer.group: my-group
+
+auth:
+  scriptToken : abc

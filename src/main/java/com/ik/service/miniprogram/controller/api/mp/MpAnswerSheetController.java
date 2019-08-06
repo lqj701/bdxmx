@@ -9,16 +9,14 @@ import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ik.crm.commons.dto.ResultResponse;
 import com.ik.service.miniprogram.annotation.IgnoreUserToken;
 import com.ik.service.miniprogram.model.AnswerSheet;
 import com.ik.service.miniprogram.model.ExamPaper;
 import com.ik.service.miniprogram.model.TeacherStudentMap;
-import com.ik.service.miniprogram.service.AnswerSheetService;
-import com.ik.service.miniprogram.service.ExamPaperService;
-import com.ik.service.miniprogram.service.TeacherService;
-import com.ik.service.miniprogram.service.TeacherStudentMapService;
+import com.ik.service.miniprogram.service.*;
 import com.ik.service.miniprogram.vo.AnswerSheetRequest;
 
 @RestController
@@ -33,6 +31,8 @@ public class MpAnswerSheetController {
     private ExamPaperService examPaperService;
     @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private QuestionService questionService;
 
     /**
      * 获取随机试卷列表
@@ -112,6 +112,16 @@ public class MpAnswerSheetController {
         jsonObject.put("setPerson", teacherService.selectByPrimaryKey(answerSheet.getTeacherId()).getName());
         jsonObject.put("paperName", examPaperService.selectByPrimaryKey(answerSheet.getPaperId()).getName());
 
+        Integer examPaperId = answerSheet.getPaperId();
+        ExamPaper examPaper = examPaperService.selectByPrimaryKey(examPaperId);
+        String questionIds = examPaper.getQuestionIds();
+        String[] questionIdArray = questionIds.substring(1, questionIds.length() - 1).split(",");
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < questionIdArray.length; i++) {
+            jsonArray.add(questionService.selectByPrimaryKey(Integer.valueOf(questionIdArray[i].replaceAll(" ", "")))
+                    .getQuestionAnswer());
+        }
+        jsonObject.put("standardAnswer", jsonArray);
         return ResultResponse.success(jsonObject);
     }
 
