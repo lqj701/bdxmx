@@ -99,19 +99,20 @@ public class AccountServiceImpl extends GenericServiceImpl<Account, Integer, Acc
         account.setId(accountId);
         account = accountMapper.selectByPrimaryKey(accountId);
         if (null == account) {
-            data.put("code", ErrorCode.ACCOUNT_NOT_EXIST.getCode());
+            data.put("error", ErrorCode.ACCOUNT_NOT_EXIST);
             return data;
         }
-        if (account.getUsable()) {
-            data.put("code", ErrorCode.ACCOUNT_NOT_USABLE.getCode());
+        if (!account.getUsable()) {
+            data.put("error", ErrorCode.ACCOUNT_NOT_USABLE);
             return data;
         }
         if (StringUtils.isEmpty(account.getEncryptedPassword())
                 || !BCryptUtil.verifyPassword(account.getEncryptedPassword(), password)) {
-            data.put("code", ErrorCode.PASSWORD_WRONG.getCode());
+            data.put("error", ErrorCode.PASSWORD_WRONG);
             return data;
         }
         account.setEncryptedPassword(BCryptUtil.digest(passwordNew));
+        account.setUpdatedAt(new Date());
         accountMapper.updateByPrimaryKeySelective(account);
 
         data.put("account", account);

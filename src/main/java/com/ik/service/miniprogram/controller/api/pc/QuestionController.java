@@ -45,6 +45,7 @@ public class QuestionController extends AbstractUserController {
         String questionImage = params.getString("questionImage");
         String questionAudio = params.getString("questionAudio");
         String questionVideo = params.getString("questionVideo");
+        String questionExplain = params.getString("questionExplain");
 
         if (StringUtils.isEmpty(stem) || StringUtils.isEmpty(answer)) {
             return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
@@ -52,7 +53,7 @@ public class QuestionController extends AbstractUserController {
 
         Question question = questionService.save(CourseEnum.getCourseEnum(courseType).getCode(),
                 QuestionEnum.getQuestionEnum(questionType).getCode(), stem, questionChoice, answer, teacher.getId(),
-                point, questionImage, questionAudio, questionVideo);
+                point, questionImage, questionAudio, questionVideo, questionExplain);
 
         return ResultResponse.success(question);
     }

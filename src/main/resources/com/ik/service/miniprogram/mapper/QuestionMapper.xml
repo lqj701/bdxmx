@@ -18,6 +18,7 @@
     <resultMap id="ResultMapWithBLOBs" type="com.ik.service.miniprogram.model.Question" extends="BaseResultMap" >
         <result column="qu_question_stem" property="questionStem" jdbcType="LONGVARCHAR" />
         <result column="qu_question_choice" property="questionChoice" jdbcType="LONGVARCHAR" />
+        <result column="qu_question_explain" property="questionExplain" jdbcType="LONGVARCHAR" />
         <result column="qu_question_answer" property="questionAnswer" jdbcType="LONGVARCHAR" />
         <result column="qu_question_audio" property="questionAudio" jdbcType="LONGVARCHAR" />
         <result column="qu_question_image" property="questionImage" jdbcType="LONGVARCHAR" />
@@ -30,8 +31,9 @@
     </sql>
     
     <sql id="Blob_Column_List" >
-        qu.question_stem as qu_question_stem, qu.question_choice as qu_question_choice, qu.question_answer as qu_question_answer, 
-        qu.question_audio as qu_question_audio, qu.question_image as qu_question_image, qu.question_video as qu_question_video
+        qu.question_stem as qu_question_stem, qu.question_choice as qu_question_choice, qu.question_explain as qu_question_explain, 
+        qu.question_answer as qu_question_answer, qu.question_audio as qu_question_audio, 
+        qu.question_image as qu_question_image, qu.question_video as qu_question_video
     </sql>
     
     <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
@@ -51,14 +53,14 @@
     <insert id="insert" parameterType="com.ik.service.miniprogram.model.Question" useGeneratedKeys="true" keyProperty="id" >
         insert into questions (teacher_id, point, course_type, 
           question_type, created_at, updated_at, 
-          question_stem, question_choice, question_answer, 
-          question_audio, question_image, question_video
-          )
+          question_stem, question_choice, question_explain, 
+          question_answer, question_audio, 
+          question_image, question_video)
         values (#{teacherId,jdbcType=INTEGER}, #{point,jdbcType=REAL}, #{courseType,jdbcType=INTEGER}, 
           #{questionType,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
-          #{questionStem,jdbcType=LONGVARCHAR}, #{questionChoice,jdbcType=LONGVARCHAR}, #{questionAnswer,jdbcType=LONGVARCHAR}, 
-          #{questionAudio,jdbcType=LONGVARCHAR}, #{questionImage,jdbcType=LONGVARCHAR}, #{questionVideo,jdbcType=LONGVARCHAR}
-          )
+          #{questionStem,jdbcType=LONGVARCHAR}, #{questionChoice,jdbcType=LONGVARCHAR}, #{questionExplain,jdbcType=LONGVARCHAR}, 
+          #{questionAnswer,jdbcType=LONGVARCHAR}, #{questionAudio,jdbcType=LONGVARCHAR}, 
+          #{questionImage,jdbcType=LONGVARCHAR}, #{questionVideo,jdbcType=LONGVARCHAR})
     </insert>
     
     <insert id="insertSelective" parameterType="com.ik.service.miniprogram.model.Question" useGeneratedKeys="true" keyProperty="id" >
@@ -87,6 +89,9 @@
             </if>
             <if test="questionChoice != null" >
                 question_choice,
+            </if>
+            <if test="questionExplain != null" >
+                question_explain,
             </if>
             <if test="questionAnswer != null" >
                 question_answer,
@@ -125,6 +130,9 @@
             </if>
             <if test="questionChoice != null" >
                 #{questionChoice,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="questionExplain != null" >
+                #{questionExplain,jdbcType=LONGVARCHAR},
             </if>
             <if test="questionAnswer != null" >
                 #{questionAnswer,jdbcType=LONGVARCHAR},
@@ -167,6 +175,9 @@
             </if>
             <if test="questionChoice != null" >
                 question_choice = #{questionChoice,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="questionExplain != null" >
+                question_explain = #{questionExplain,jdbcType=LONGVARCHAR},
             </if>
             <if test="questionAnswer != null" >
                 question_answer = #{questionAnswer,jdbcType=LONGVARCHAR},
@@ -224,6 +235,9 @@
                 </if>
                 <if test="model.questionChoice != null" >
                     and qu.question_choice = #{model.questionChoice}
+                </if>
+                <if test="model.questionExplain != null" >
+                    and qu.question_explain = #{model.questionExplain}
                 </if>
                 <if test="model.questionAnswer != null" >
                     and qu.question_answer = #{model.questionAnswer}
@@ -284,15 +298,17 @@
         insert into questions (
             teacher_id, point, course_type, 
             question_type, created_at, updated_at, 
-            question_stem, question_choice, question_answer, 
-            question_audio, question_image, question_video
+            question_stem, question_choice, question_explain, 
+            question_answer, question_audio, question_image, 
+            question_video
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
         (
             #{item.teacherId}, #{item.point}, #{item.courseType}, 
             #{item.questionType}, #{item.createdAt}, #{item.updatedAt}, 
-            #{item.questionStem}, #{item.questionChoice}, #{item.questionAnswer}, 
-            #{item.questionAudio}, #{item.questionImage}, #{item.questionVideo}
+            #{item.questionStem}, #{item.questionChoice}, #{item.questionExplain}, 
+            #{item.questionAnswer}, #{item.questionAudio}, #{item.questionImage}, 
+            #{item.questionVideo}
         )
         </foreach>
     </insert>

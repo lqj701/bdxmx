@@ -1,5 +1,6 @@
 package com.ik.service.miniprogram.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.mybatis.extend.generic.service.impl.GenericServiceImpl;
@@ -36,7 +37,8 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, Integer, Q
 
     @Override
     public Question save(Integer courseType, Integer questionType, String stem, String questionChoice, String answer,
-            Integer teacherId, Float point, String questionImage, String questionAudio, String questionVideo) {
+            Integer teacherId, Float point, String questionImage, String questionAudio, String questionVideo,
+            String quesitonExplain) {
         Question question = new Question();
         question.setCourseType(courseType);
         question.setQuestionType(questionType);
@@ -48,6 +50,9 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, Integer, Q
         question.setQuestionAnswer(answer);
         question.setTeacherId(teacherId);
         question.setPoint(point);
+        question.setQuestionExplain(quesitonExplain);
+        question.setCreatedAt(new Date());
+        question.setUpdatedAt(new Date());
         questionMapper.insertSelective(question);
         return question;
     }
@@ -64,6 +69,7 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, Integer, Q
         question.setQuestionImage(questionImage);
         question.setQuestionAudio(questionAudio);
         question.setQuestionVideo(questionVideo);
+        question.setUpdatedAt(new Date());
         questionMapper.updateByPrimaryKeySelective(question);
         return question;
     }

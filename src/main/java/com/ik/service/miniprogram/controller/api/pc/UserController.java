@@ -112,7 +112,11 @@ public class UserController extends AbstractUserController {
                     ErrorCode.PASSWORD_NOT_THE_SAME.getMsg());
         }
 
-        accountService.updatePassword(teacher.getAccountId(), password, passwordNew);
+        JSONObject data = accountService.updatePassword(teacher.getAccountId(), password, passwordNew);
+        ErrorCode errorCode = (ErrorCode) data.get("error");
+        if (data.get("error") != null) {
+            return ResultResponse.define(errorCode.getCode(), errorCode.getMsg());
+        }
 
         return ResultResponse.success();
     }

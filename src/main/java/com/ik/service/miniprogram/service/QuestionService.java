@@ -17,7 +17,8 @@ import com.ik.service.miniprogram.model.Question;
 public interface QuestionService extends GenericService<Question, Integer> {
 
     Question save(Integer courseType, Integer questionType, String stem, String questionChoice, String answer,
-            Integer teacherId, Float point, String questionImage, String questionAudio, String questionVideo);
+            Integer teacherId, Float point, String questionImage, String questionAudio, String questionVideo,
+            String quesitonExplain);
 
     Question update(Question question, String stem, String questionChoice, String answer, Float point,
             String questionImage, String questionAudio, String questionVideo);

@@ -61,6 +61,12 @@ public class Question extends BaseModel<Integer> implements Serializable {
     private String questionChoice;
 
     /**
+     * 解答
+     * question_explain
+     */
+    private String questionExplain;
+
+    /**
      * JSON字符串
      * question_answer
      */
@@ -231,6 +237,24 @@ public class Question extends BaseModel<Integer> implements Serializable {
     }
 
     /**
+     * 解答
+     * question_explain
+     */
+    public String getQuestionExplain() {
+        return questionExplain;
+    }
+
+    /**
+     * 解答
+     * question_explain
+     *
+     * @param questionExplain 解答
+     */
+    public void setQuestionExplain(String questionExplain) {
+        this.questionExplain = questionExplain;
+    }
+
+    /**
      * JSON字符串
      * question_answer
      */
@@ -317,6 +341,7 @@ public class Question extends BaseModel<Integer> implements Serializable {
         sb.append(", updatedAt=").append(updatedAt);
         sb.append(", questionStem=").append(questionStem);
         sb.append(", questionChoice=").append(questionChoice);
+        sb.append(", questionExplain=").append(questionExplain);
         sb.append(", questionAnswer=").append(questionAnswer);
         sb.append(", questionAudio=").append(questionAudio);
         sb.append(", questionImage=").append(questionImage);
