@@ -116,12 +116,16 @@ public class MpAnswerSheetController {
         ExamPaper examPaper = examPaperService.selectByPrimaryKey(examPaperId);
         String questionIds = examPaper.getQuestionIds();
         String[] questionIdArray = questionIds.substring(1, questionIds.length() - 1).split(",");
-        JSONArray jsonArray = new JSONArray();
+        JSONArray standardAnswer = new JSONArray();
+        JSONArray answerExplain = new JSONArray();
         for (int i = 0; i < questionIdArray.length; i++) {
-            jsonArray.add(questionService.selectByPrimaryKey(Integer.valueOf(questionIdArray[i].replaceAll(" ", "")))
+            standardAnswer.add(questionService.selectByPrimaryKey(Integer.valueOf(questionIdArray[i].replaceAll(" ", "")))
                     .getQuestionAnswer());
+            answerExplain.add(questionService.selectByPrimaryKey(Integer.valueOf(questionIdArray[i].replaceAll(" ", "")))
+                    .getQuestionExplain());
         }
-        jsonObject.put("standardAnswer", jsonArray);
+        jsonObject.put("standardAnswer", standardAnswer);
+        jsonObject.put("answerExplain", answerExplain);
         return ResultResponse.success(jsonObject);
     }
 
