@@ -47,9 +47,16 @@ public class QuestionController extends AbstractUserController {
         String questionVideo = params.getString("questionVideo");
         String questionExplain = params.getString("questionExplain");
 
-        if (StringUtils.isEmpty(stem) || StringUtils.isEmpty(answer)) {
+        if (StringUtils.isEmpty(stem) || StringUtils.isEmpty(answer) || StringUtils.isEmpty(questionExplain)
+                || StringUtils.isEmpty(point) || StringUtils.isEmpty(questionType)) {
             return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
         }
+        if (QuestionEnum.choice.getCode().equals(questionType)) {
+            if (StringUtils.isEmpty(questionChoice)) {
+                return ResultResponse.define(ErrorCode.PARAM_IS_NULL.getCode(), ErrorCode.PARAM_IS_NULL.getMsg());
+            }
+        }
+
 
         Question question = questionService.save(CourseEnum.getCourseEnum(courseType).getCode(),
                 QuestionEnum.getQuestionEnum(questionType).getCode(), stem, questionChoice, answer, teacher.getId(),
