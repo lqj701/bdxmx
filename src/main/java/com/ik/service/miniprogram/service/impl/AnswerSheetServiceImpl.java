@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ik.crm.commons.util.DateUtils;
 import com.ik.service.miniprogram.mapper.AnswerSheetMapper;
 import com.ik.service.miniprogram.model.AnswerSheet;
 import com.ik.service.miniprogram.service.AnswerSheetService;
@@ -43,8 +42,8 @@ public class AnswerSheetServiceImpl extends GenericServiceImpl<AnswerSheet, Inte
         answerSheet.setStudentAnswer(answerSheetRequest.getStudentAnswer());
         answerSheet.setTeacherCorrection(answerSheetRequest.getTeacherCorrection());
         answerSheet.setRemark(answerSheetRequest.getRemark());
-        answerSheet.setStartedAt(DateUtils.parseDate(answerSheetRequest.getStartedAt()));
-        answerSheet.setCompletedAt(new Date());
+        answerSheet.setStartedAt(new Date(Long.valueOf(answerSheetRequest.getStartedAt())));
+        answerSheet.setCompletedAt(new Date(Long.valueOf(answerSheetRequest.getCompletedAt())));
 
         answerSheet.setCreatedAt(new Date());
         answerSheet.setUpdatedAt(new Date());
